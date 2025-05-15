@@ -20,6 +20,8 @@ desktop.ini
 *.old
 *_new.*
 *_old.*
+*.backup
+*.bak.*
 
 # Logs
 logs

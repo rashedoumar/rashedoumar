@@ -82,46 +82,7 @@ try {
     }, 200);
   });
   
-  // Add keyboard navigation for command history
-  terminalInput.addEventListener('keydown', function(e) {
-    // Up arrow for previous command
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (commandHistory.length > 0) {
-        historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
-        terminalInput.value = commandHistory[historyIndex];
-      }
-    }
-    // Down arrow for next command
-    else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIndex > 0) {
-        historyIndex--;
-        terminalInput.value = commandHistory[historyIndex];
-      } else if (historyIndex === 0) {
-        historyIndex = -1;
-        terminalInput.value = '';
-      }
-    }
-    // Tab for auto-completion
-    else if (e.key === 'Tab') {
-      e.preventDefault();
-      const input = terminalInput.value.trim();
-      const suggestions = autoCompleteCommand(input);
-      
-      if (suggestions.length === 1) {
-        terminalInput.value = suggestions[0];
-      } else if (suggestions.length > 0) {
-        // Show all suggestions
-        terminalSuggestions.innerHTML = suggestions
-          .map(s => `<div class="suggestion">${s}</div>`)
-          .join('');
-        terminalSuggestions.style.display = 'block';
-      }
-    }
-  });
-  
-  // More advanced commands
+  // Define command implementations
   const commands = {
     help: () => {
       return `
@@ -176,35 +137,57 @@ try {
     },
     skills: () => {
       return `
-        <span style="color: var(--accent);">Key Skills:</span>
-        • Cloud: AWS, Azure, GCP
-        • Infrastructure: Docker, Kubernetes, Terraform
-        • Frontend: React, TypeScript, Angular
-        • Backend: Node.js, Python, PHP/Laravel
-        • Database: MySQL, PostgreSQL, MongoDB
-        • Security: HIPAA compliance, encryption
-        • AI/ML: TensorFlow, PyTorch, NLP
+        <span style="color: var(--accent);">Skills & Technologies:</span>
+        
+        <span style="color: var(--neon-pink);">Frontend:</span> React, Angular, TypeScript, JavaScript, HTML5, CSS3
+        
+        <span style="color: var(--neon-pink);">Backend:</span> Node.js, PHP, Laravel, Python, Java
+        
+        <span style="color: var(--neon-pink);">Cloud & DevOps:</span> AWS, Docker, Kubernetes, Terraform, CI/CD
+        
+        <span style="color: var(--neon-pink);">Databases:</span> MySQL, PostgreSQL, MongoDB, Redis, Elasticsearch
+        
+        <span style="color: var(--neon-pink);">Healthcare Tech:</span> HIPAA, FHIR, CCLF, Salesforce Health Cloud
+        
+        <span style="color: var(--neon-pink);">AI & ML:</span> TensorFlow, PyTorch, NLP, AWS SageMaker
+        
+        <span style="color: var(--text-secondary);">View more details in the Skills section below</span>
       `;
     },
     projects: () => {
       return `
         <span style="color: var(--accent);">Recent Projects:</span>
-        • <span style="color: var(--neon-pink);">Banzai Collaboration Platform</span> - Healthcare collaboration system
-        • <span style="color: var(--neon-pink);">Care Patient Dashboard</span> - Patient monitoring dashboard
-        • <span style="color: var(--neon-pink);">HealthAI Analytics</span> - AI-driven patient data analysis
-        • <span style="color: var(--neon-pink);">SecureFlow Pipeline</span> - CI/CD automation for healthcare
         
-        Scroll down to view project details!
+        <span style="color: var(--neon-pink);">Banzai Collaboration Tracking</span>
+        <span style="color: var(--text-secondary);">Serverless platform for healthcare collaboration, HIPAA-compliant.</span>
+        <span style="color: var(--text-secondary);">Tech: TypeScript, Node.js, React, AWS Lambda</span>
+        
+        <span style="color: var(--neon-pink);">Care Patient Dashboard</span>
+        <span style="color: var(--text-secondary);">Patient health dashboard with Twilio integration and microservices.</span>
+        <span style="color: var(--text-secondary);">Tech: Laravel, Node.js, React, Docker</span>
+        
+        <span style="color: var(--neon-pink);">iHELP Logistics Platform</span>
+        <span style="color: var(--text-secondary);">Cloud-based emergency logistics platform with microservices.</span>
+        <span style="color: var(--text-secondary);">Tech: PHP, React, AWS EC2, MySQL</span>
+        
+        <span style="color: var(--text-secondary);">View more details in the Projects section below</span>
       `;
     },
     contact: () => {
       return `
-        <span style="color: var(--accent);">Contact Info:</span>
-        • Email: <span style="color: var(--neon-pink);">rashed@example.com</span>
-        • LinkedIn: <span style="color: var(--neon-pink);">linkedin.com/in/rashed-omar</span>
-        • GitHub: <span style="color: var(--neon-pink);">github.com/rashedomar</span>
+        <span style="color: var(--accent);">Contact Information:</span>
         
-        Feel free to reach out for collaborations or opportunities!
+        <span style="color: var(--neon-pink);">Email:</span> <span style="color: var(--text-secondary);">rashedoumar@gmail.com</span>
+        
+        <span style="color: var(--neon-pink);">Phone:</span> <span style="color: var(--text-secondary);">+962-790676797</span>
+        
+        <span style="color: var(--neon-pink);">Location:</span> <span style="color: var(--text-secondary);">Amman, Jordan & New York, NY</span>
+        
+        <span style="color: var(--neon-pink);">LinkedIn:</span> <span style="color: var(--text-secondary);">linkedin.com/in/rashed-omar-b85239143/</span>
+        
+        <span style="color: var(--neon-pink);">GitHub:</span> <span style="color: var(--text-secondary);">github.com/rashedomar</span>
+        
+        <span style="color: var(--text-secondary);">View the Contact section below to send a message directly</span>
       `;
     },
     game: () => {
@@ -226,166 +209,160 @@ try {
     git: (args) => {
       if (args[0] === 'log') {
         return `
-          <span style="color: var(--neon-pink);">commit a8f9c21e7d4b5e6f</span> (HEAD -> main)
-          Author: Rashed Omar <rashed@example.com>
-          Date:   ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}
+          <span style="color: var(--accent);">Recent Git Commits:</span>
           
-              <span style="color: var(--accent);">feat: implement advanced search algorithm</span>
+          <span style="color: var(--neon-pink);">commit f8a21cd5e4b0c9d8b5f2e3a1c7d6b5a4e3c2d1b0</span>
+          <span style="color: var(--text-secondary);">Author: Rashed Omar <rashedoumar@gmail.com></span>
+          <span style="color: var(--text-secondary);">Date: ${new Date().toISOString().split('T')[0]}</span>
+          <span style="color: var(--text-secondary);">    Add Matrix rain animation for AI commands</span>
           
-          <span style="color: var(--neon-pink);">commit 42d3e5f6a7b8c9d0</span>
-          Author: Rashed Omar <rashed@example.com>
-          Date:   ${new Date(Date.now() - 86400000).toLocaleDateString()} ${new Date(Date.now() - 86400000).toLocaleTimeString()}
+          <span style="color: var(--neon-pink);">commit a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0</span>
+          <span style="color: var(--text-secondary);">Author: Rashed Omar <rashedoumar@gmail.com></span>
+          <span style="color: var(--text-secondary);">Date: ${new Date(Date.now() - 86400000).toISOString().split('T')[0]}</span>
+          <span style="color: var(--text-secondary);">    Implement terminal command history and autocomplete</span>
           
-              <span style="color: var(--accent);">fix: resolve user authentication edge case</span>
-          
-          <span style="color: var(--neon-pink);">commit 9f8e7d6c5b4a3210</span>
-          Author: Rashed Omar <rashed@example.com>
-          Date:   ${new Date(Date.now() - 172800000).toLocaleDateString()} ${new Date(Date.now() - 172800000).toLocaleTimeString()}
-          
-              <span style="color: var(--accent);">chore: update dependencies</span>
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">git version 2.42.0</span>
-          Try 'git log' to see commit history
+          <span style="color: var(--neon-pink);">commit b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1</span>
+          <span style="color: var(--text-secondary);">Author: Rashed Omar <rashedoumar@gmail.com></span>
+          <span style="color: var(--text-secondary);">Date: ${new Date(Date.now() - 172800000).toISOString().split('T')[0]}</span>
+          <span style="color: var(--text-secondary);">    Enhance responsive design for mobile devices</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">Git Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: git [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: log</span>
+      `;
     },
     aws: (args) => {
       if (args[0] === 'status') {
         return `
-          <span style="color: var(--accent);">AWS Service Status</span>
+          <span style="color: var(--accent);">AWS Services Status:</span>
           
-          <span style="color: #4CAF50;">● EC2</span> - All systems operational (99.99%)
-          <span style="color: #4CAF50;">● S3</span> - All systems operational (99.99%)
-          <span style="color: #4CAF50;">● Lambda</span> - All systems operational (99.99%)
-          <span style="color: #FFEB3B;">● DynamoDB</span> - Performance issues in us-east-1 (97.5%)
-          <span style="color: #4CAF50;">● RDS</span> - All systems operational (99.99%)
-          <span style="color: #4CAF50;">● CloudFront</span> - All systems operational (99.99%)
+          <span style="color: var(--neon-pink);">EC2:</span> <span style="color: var(--text-secondary);">✅ Operational</span>
+          <span style="color: var(--neon-pink);">S3:</span> <span style="color: var(--text-secondary);">✅ Operational</span>
+          <span style="color: var(--neon-pink);">Lambda:</span> <span style="color: var(--text-secondary);">✅ Operational</span>
+          <span style="color: var(--neon-pink);">RDS:</span> <span style="color: var(--text-secondary);">✅ Operational</span>
+          <span style="color: var(--neon-pink);">CloudFront:</span> <span style="color: var(--text-secondary);">✅ Operational</span>
+          <span style="color: var(--neon-pink);">DynamoDB:</span> <span style="color: var(--text-secondary);">❗ Degraded Performance</span>
+          <span style="color: var(--neon-pink);">Route53:</span> <span style="color: var(--text-secondary);">✅ Operational</span>
           
-          Last deployment: <span style="color: var(--neon-pink);">12 minutes ago</span>
-          Current account budget: <span style="color: var(--accent);">89% remaining</span>
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">aws-cli/2.13.5 Python/3.11.4</span>
-          Try 'aws status' to check service health
+          <span style="color: var(--text-secondary);">Last updated: ${new Date().toLocaleTimeString()}</span>
+          <span style="color: var(--text-secondary);">Region: us-east-1</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">AWS Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: aws [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: status</span>
+      `;
     },
     docker: (args) => {
       if (args[0] === 'ps') {
         return `
-          <span style="color: var(--accent);">CONTAINER ID        IMAGE                    STATUS              PORTS                  NAMES</span>
-          8f7e6d5c4b3a        healthcare-api:latest    Up 3 days           0.0.0.0:3000->3000/tcp   api-service
-          2a1b3c4d5e6f        react-frontend:latest    Up 3 days           0.0.0.0:80->80/tcp       web-client
-          7g8h9i0j1k2l        postgres:14.5            Up 3 days           0.0.0.0:5432->5432/tcp   database
-          3m4n5o6p7q8r        redis:alpine             Up 3 days           0.0.0.0:6379->6379/tcp   cache
-          9s0t1u2v3w4x        elasticsearch:8.5.0      Up 3 days           0.0.0.0:9200->9200/tcp   search
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">Docker version 24.0.5, build ced0996</span>
-          Try 'docker ps' to see running containers
+          <span style="color: var(--accent);">Running Docker Containers:</span>
+          
+          <span style="color: var(--neon-pink);">CONTAINER ID</span>   <span style="color: var(--neon-pink);">IMAGE</span>                <span style="color: var(--neon-pink);">STATUS</span>        <span style="color: var(--neon-pink);">PORTS</span>
+          <span style="color: var(--text-secondary);">a1b2c3d4e5f6</span>   <span style="color: var(--text-secondary);">nginx:latest</span>         <span style="color: var(--text-secondary);">Up 2 days</span>     <span style="color: var(--text-secondary);">0.0.0.0:80->80/tcp</span>
+          <span style="color: var(--text-secondary);">b2c3d4e5f6a1</span>   <span style="color: var(--text-secondary);">mysql:8.0</span>            <span style="color: var(--text-secondary);">Up 2 days</span>     <span style="color: var(--text-secondary);">0.0.0.0:3306->3306/tcp</span>
+          <span style="color: var(--text-secondary);">c3d4e5f6a1b2</span>   <span style="color: var(--text-secondary);">node:16-alpine</span>       <span style="color: var(--text-secondary);">Up 1 day</span>      <span style="color: var(--text-secondary);">0.0.0.0:3000->3000/tcp</span>
+          <span style="color: var(--text-secondary);">d4e5f6a1b2c3</span>   <span style="color: var(--text-secondary);">redis:alpine</span>         <span style="color: var(--text-secondary);">Up 2 days</span>     <span style="color: var(--text-secondary);">0.0.0.0:6379->6379/tcp</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">Docker Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: docker [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: ps</span>
+      `;
     },
     terraform: (args) => {
       if (args[0] === 'plan') {
         return `
-          <span style="color: var(--accent);">Terraform Infrastructure Plan</span>
+          <span style="color: var(--accent);">Terraform Plan Output:</span>
           
-          <span style="color: #4CAF50;">+ aws_lambda_function.data_processor</span>
-          <span style="color: #4CAF50;">+ aws_api_gateway_rest_api.healthcare_api</span>
-          <span style="color: #FFEB3B;">~ aws_security_group.database_sg</span>
-          <span style="color: #F44336;">- aws_instance.legacy_server</span>
+          <span style="color: var(--text-secondary);">Initializing provider plugins...</span>
+          <span style="color: var(--text-secondary);">- Finding latest version of hashicorp/aws...</span>
+          <span style="color: var(--text-secondary);">- Installing hashicorp/aws v4.67.0...</span>
           
-          Plan: <span style="color: #4CAF50;">5 to add</span>, <span style="color: #FFEB3B;">3 to change</span>, <span style="color: #F44336;">1 to destroy</span>
+          <span style="color: var(--text-secondary);">Terraform will perform the following actions:</span>
           
-          Estimated cost: $352.70/month (+$47.20)
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">Terraform v1.5.7</span>
-          Try 'terraform plan' to see infrastructure changes
+          <span style="color: var(--neon-pink);">  + aws_s3_bucket.static_site</span>
+          <span style="color: var(--text-secondary);">      id:                    <computed></span>
+          <span style="color: var(--text-secondary);">      bucket:                "rashed-portfolio"</span>
+          <span style="color: var(--text-secondary);">      acl:                   "public-read"</span>
+          
+          <span style="color: var(--neon-pink);">  + aws_cloudfront_distribution.s3_distribution</span>
+          <span style="color: var(--text-secondary);">      id:                    <computed></span>
+          <span style="color: var(--text-secondary);">      origin:                [origin{...}]</span>
+          <span style="color: var(--text-secondary);">      enabled:               true</span>
+          
+          <span style="color: var(--accent);">Plan: 2 to add, 0 to change, 0 to destroy.</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">Terraform Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: terraform [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: plan</span>
+      `;
     },
     kubernetes: (args) => {
       if (args[0] === 'status') {
         return `
-          <span style="color: var(--accent);">Kubernetes Cluster Status</span>
+          <span style="color: var(--accent);">Kubernetes Cluster Status:</span>
           
-          <span style="color: #4CAF50;">● api-gateway</span> - 3/3 replicas running
-          <span style="color: #4CAF50;">● auth-service</span> - 2/2 replicas running
-          <span style="color: #FFEB3B;">● patient-data</span> - 1/2 replicas running
-          <span style="color: #4CAF50;">● analytics</span> - 1/1 replicas running
-          <span style="color: #4CAF50;">● monitoring</span> - 2/2 replicas running
+          <span style="color: var(--neon-pink);">Cluster Name:</span> <span style="color: var(--text-secondary);">portfolio-cluster</span>
+          <span style="color: var(--neon-pink);">Kubernetes Version:</span> <span style="color: var(--text-secondary);">v1.28.3</span>
+          <span style="color: var(--neon-pink);">Status:</span> <span style="color: var(--text-secondary);">Healthy</span>
           
-          Resource usage:
-          CPU: 67% | Memory: 58% | Storage: 43%
+          <span style="color: var(--neon-pink);">Nodes:</span>
+          <span style="color: var(--text-secondary);">worker-1: Ready</span>
+          <span style="color: var(--text-secondary);">worker-2: Ready</span>
+          <span style="color: var(--text-secondary);">worker-3: Ready</span>
           
-          <span style="color: #FFEB3B;">Alert:</span> patient-data pod restart detected
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">Kubernetes v1.28.0</span>
-          Try 'kubernetes status' to check cluster health
+          <span style="color: var(--neon-pink);">Deployments:</span>
+          <span style="color: var(--text-secondary);">frontend: 3/3 replicas</span>
+          <span style="color: var(--text-secondary);">backend: 2/2 replicas</span>
+          <span style="color: var(--text-secondary);">database: 1/1 replicas</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">Kubernetes Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: kubernetes [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: status</span>
+      `;
     },
     python: (args) => {
-      if (args[0] === '--version') {
+      if (args.includes('--version')) {
         return `
-          <span style="color: var(--accent);">Python 3.11.4</span>
-          
-          <span style="color: var(--text-secondary);">Installed packages:</span>
-          tensorflow==2.13.0
-          pandas==2.0.3
-          scikit-learn==1.3.0
-          numpy==1.24.3
-          boto3==1.28.17
-          flask==2.3.2
-          django==4.2.3
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">Python 3.11.4</span>
-          Try 'python --version' to see installed packages
+          <span style="color: var(--accent);">Python 3.11.6</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">Python Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: python [options]</span>
+        <span style="color: var(--text-secondary);">Available options: --version</span>
+      `;
     },
     react: (args) => {
       if (args[0] === 'start') {
-        let startupLines = '';
-        const steps = [
-          'Compiling...',
-          'Loading webpack configuration...',
-          'Starting development server...',
-          'Compiling TypeScript...',
-          'Bundling modules...',
-          'Compiled successfully!'
-        ];
-        
-        steps.forEach((step, i) => {
-          startupLines += `<div style="color: ${i === steps.length - 1 ? '#4CAF50' : 'var(--text-secondary)'};">${step}</div>`;
-        });
-        
         return `
-          <span style="color: var(--accent);">React Development Server</span>
-          ${startupLines}
-          <span style="color: var(--neon-pink);">Local:</span>            http://localhost:3000
-          <span style="color: var(--neon-pink);">On Your Network:</span>  http://192.168.1.5:3000
+          <span style="color: var(--accent);">Starting the development server...</span>
           
-          Note that the development build is not optimized.
-          To create a production build, use npm run build.
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">React CLI v18.2.0</span>
-          Try 'react start' to start a development server
+          <span style="color: var(--text-secondary);">Compiled successfully!</span>
+          
+          <span style="color: var(--neon-pink);">You can now view portfolio-app in the browser.</span>
+          
+          <span style="color: var(--text-secondary);">Local:            http://localhost:3000</span>
+          <span style="color: var(--text-secondary);">On Your Network:  http://192.168.1.5:3000</span>
+          
+          <span style="color: var(--text-secondary);">Note that the development build is not optimized.</span>
+          <span style="color: var(--text-secondary);">To create a production build, use npm run build.</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">React Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: react [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: start</span>
+      `;
     },
     system: (args) => {
       if (args[0] === 'status') {
@@ -420,229 +397,112 @@ try {
         `;
       }
     },
-    hipaa: (args) => {
-      if (args[0] === 'audit') {
-        return `
-          <span style="color: var(--accent);">HIPAA Compliance Audit</span>
-          
-          <span style="color: #4CAF50;">✓ Authentication & Access Controls</span>
-          - Multi-factor authentication enabled
-          - Role-based access control validated
-          - Password policies compliant
-          
-          <span style="color: #4CAF50;">✓ Encryption Standards</span>
-          - Data at rest: AES-256 encryption
-          - Data in transit: TLS 1.3 verified
-          - Encryption key management secure
-          
-          <span style="color: #FFEB3B;">⚠ Audit Logging</span>
-          - Missing log rotation policy
-          - Recommendation: Implement 90-day retention policy
-          
-          <span style="color: #4CAF50;">✓ Business Associate Agreements</span>
-          - All vendor BAAs up to date
-          - Data processing agreements reviewed
-          
-          <span style="color: #4CAF50;">✓ Backup & Disaster Recovery</span>
-          - Daily backups verified
-          - Recovery time objectives met
-          
-          <span style="color: var(--neon-pink);">Overall Compliance Score: 96%</span>
-          <span style="color: var(--text-secondary);">Last Full Audit: 26 days ago</span>
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">HIPAA Compliance Tool v3.2</span>
-          Try 'hipaa audit' to check compliance status
-        `;
-      }
-    },
     laravel: (args) => {
       if (args[0] === 'deploy') {
-        let deployLines = '';
-        const steps = [
-          'Initiating Laravel deployment process...',
-          'Running composer install --no-dev --optimize-autoloader...',
-          'Clearing application cache...',
-          'Running database migrations...',
-          'Optimizing route caching...',
-          'Building frontend assets with npm...',
-          'Restarting queue workers...',
-          'Deployment complete!'
-        ];
-        
-        steps.forEach((step, i) => {
-          deployLines += `<div style="color: ${i === steps.length - 1 ? '#4CAF50' : 'var(--text-secondary)'};">${step}</div>`;
-        });
-        
         return `
-          <span style="color: var(--accent);">Laravel Deployment</span>
-          ${deployLines}
+          <span style="color: var(--accent);">Deploying Laravel Application...</span>
           
-          <span style="color: var(--neon-pink);">Environment:</span> production
-          <span style="color: var(--neon-pink);">Application Version:</span> 3.5.2
-          <span style="color: var(--neon-pink);">Deployment Time:</span> 127 seconds
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">Laravel Framework v10.2.3</span>
-          Try 'laravel deploy' to deploy the application
+          <span style="color: var(--text-secondary);">> Optimizing routes...</span>
+          <span style="color: var(--text-secondary);">> Optimizing views...</span>
+          <span style="color: var(--text-secondary);">> Running migrations...</span>
+          <span style="color: var(--text-secondary);">> Clearing cache...</span>
+          <span style="color: var(--text-secondary);">> Setting up storage symlinks...</span>
+          
+          <span style="color: var(--neon-pink);">Application deployed successfully!</span>
+          <span style="color: var(--text-secondary);">Environment: production</span>
+          <span style="color: var(--text-secondary);">URL: https://api.rashedomar.com</span>
         `;
       }
+      return `
+        <span style="color: var(--neon-pink);">Laravel Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: laravel [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: deploy</span>
+      `;
     },
     npm: (args) => {
       if (args[0] === 'run') {
         return `
-          <span style="color: var(--accent);">NPM Scripts</span>
+          <span style="color: var(--accent);">Available npm scripts:</span>
           
-          <span style="color: var(--text-secondary);">Available scripts:</span>
-          <span style="color: var(--neon-pink);">dev</span> - Start development server
-          <span style="color: var(--neon-pink);">build</span> - Build for production
-          <span style="color: var(--neon-pink);">test</span> - Run test suite
-          <span style="color: var(--neon-pink);">lint</span> - Lint codebase
-          <span style="color: var(--neon-pink);">deploy</span> - Deploy to production
+          <span style="color: var(--text-secondary);">  dev</span>       <span style="color: var(--text-secondary);">Start development server</span>
+          <span style="color: var(--text-secondary);">  build</span>     <span style="color: var(--text-secondary);">Build for production</span>
+          <span style="color: var(--text-secondary);">  lint</span>      <span style="color: var(--text-secondary);">Run ESLint</span>
+          <span style="color: var(--text-secondary);">  test</span>      <span style="color: var(--text-secondary);">Run Jest tests</span>
+          <span style="color: var(--text-secondary);">  deploy</span>    <span style="color: var(--text-secondary);">Deploy to production</span>
           
-          <span style="color: var(--text-secondary);">Usage:</span> npm run [script]
-        `;
-      } else {
-        return `
-          <span style="color: var(--text-secondary);">npm v9.8.0</span>
-          <span style="color: var(--text-secondary);">node v18.17.1</span>
-          Try 'npm run' to see available scripts
+          <span style="color: var(--neon-pink);">Usage:</span> <span style="color: var(--text-secondary);">npm run [script]</span>
+          <span style="color: var(--text-secondary);">Example: npm run dev</span>
         `;
       }
-    },
-    ls: () => {
       return `
-        <span style="color: var(--accent);">Directory Contents</span>
-        
-        <span style="color: var(--neon-pink);">📂 projects/</span>
-        <span style="color: var(--neon-pink);">📂 skills/</span>
-        <span style="color: var(--neon-pink);">📂 experience/</span>
-        <span style="color: var(--neon-pink);">📂 contact/</span>
-        <span style="color: var(--text-secondary);">📄 README.md</span>
-        <span style="color: var(--text-secondary);">📄 package.json</span>
-        <span style="color: var(--text-secondary);">📄 webpack.config.js</span>
-        <span style="color: var(--text-secondary);">📄 tsconfig.json</span>
-      `;
-    },
-    whoami: () => {
-      // Browser detection
-      const userAgent = navigator.userAgent;
-      let browser = "Unknown";
-      let os = "Unknown";
-      
-      // Detect browser
-      if (userAgent.indexOf("Firefox") > -1) {
-        browser = "Mozilla Firefox";
-      } else if (userAgent.indexOf("SamsungBrowser") > -1) {
-        browser = "Samsung Browser";
-      } else if (userAgent.indexOf("Opera") > -1 || userAgent.indexOf("OPR") > -1) {
-        browser = "Opera";
-      } else if (userAgent.indexOf("Trident") > -1) {
-        browser = "Internet Explorer";
-      } else if (userAgent.indexOf("Edge") > -1) {
-        browser = "Microsoft Edge";
-      } else if (userAgent.indexOf("Chrome") > -1) {
-        browser = "Google Chrome";
-      } else if (userAgent.indexOf("Safari") > -1) {
-        browser = "Safari";
-      }
-      
-      // Detect OS
-      if (userAgent.indexOf("Windows NT 10.0") > -1) os = "Windows 10";
-      else if (userAgent.indexOf("Windows NT 6.3") > -1) os = "Windows 8.1";
-      else if (userAgent.indexOf("Windows NT 6.2") > -1) os = "Windows 8";
-      else if (userAgent.indexOf("Windows NT 6.1") > -1) os = "Windows 7";
-      else if (userAgent.indexOf("Windows NT 6.0") > -1) os = "Windows Vista";
-      else if (userAgent.indexOf("Windows NT 5.1") > -1) os = "Windows XP";
-      else if (userAgent.indexOf("Windows NT 5.0") > -1) os = "Windows 2000";
-      else if (userAgent.indexOf("Mac") > -1) os = "macOS";
-      else if (userAgent.indexOf("X11") > -1) os = "UNIX";
-      else if (userAgent.indexOf("Linux") > -1) os = "Linux";
-      else if (userAgent.indexOf("Android") > -1) os = "Android";
-      else if (userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1) os = "iOS";
-      
-      // Get screen resolution
-      const screenRes = `${window.screen.width}x${window.screen.height}`;
-      
-      // Add a random ID that looks like an IP but is just random
-      const fakeIP = `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
-      
-      return `
-        <span style="color: var(--accent);">User Information</span>
-        
-        <span style="color: var(--neon-pink);">Username:</span> visitor
-        <span style="color: var(--neon-pink);">Full Name:</span> Portfolio Guest
-        <span style="color: var(--neon-pink);">Browser:</span> ${browser}
-        <span style="color: var(--neon-pink);">Operating System:</span> ${os}
-        <span style="color: var(--neon-pink);">Display Resolution:</span> ${screenRes}
-        <span style="color: var(--neon-pink);">IP Address:</span> ${fakeIP}
-        <span style="color: var(--neon-pink);">Login Time:</span> ${new Date().toLocaleTimeString()}
-        <span style="color: var(--neon-pink);">Session ID:</span> ${Math.random().toString(36).substring(2, 10)}
-        
-        <span style="color: var(--text-secondary);">Note: This is just a fun simulation. No actual system information is being accessed or stored.</span>
+        <span style="color: var(--neon-pink);">npm Command Help:</span>
+        <span style="color: var(--text-secondary);">Usage: npm [command]</span>
+        <span style="color: var(--text-secondary);">Available commands: run</span>
       `;
     },
     hack: (args) => {
-      if (args.length === 0) {
-        return `
-          <span style="color: var(--neon-pink);">Usage: hack [target]</span>
-          <span style="color: var(--text-secondary);">Example: hack nasa</span>
-        `;
-      }
+      const target = args[0] || 'unknown';
+      const targetDisplayName = target.charAt(0).toUpperCase() + target.slice(1);
       
-      const target = args[0].toLowerCase();
-      const progressSteps = [10, 25, 40, 60, 75, 90, 100];
-      let hackOutput = `<span style="color: var(--accent);">Attempting to hack ${target}...</span>\n`;
-      
-      // Generate fake hacking sequence
-      progressSteps.forEach(progress => {
-        hackOutput += `<div>[${progress}%] Exploiting vulnerabilities...</div>`;
-      });
-      
-      // Responses for different targets
-      if (target === "nasa" || target === "fbi" || target === "cia" || target === "pentagon") {
-        hackOutput += `
-          <span style="color: var(--neon-pink);">ACCESS DENIED! This incident has been reported.</span>
-          <span style="color: var(--text-secondary);">Just kidding! This is just a portfolio demo. But seriously, don't try to hack government agencies.</span>
-          <span style="color: var(--text-secondary);">Fun fact: In the real world, this would be extremely illegal.</span>
-        `;
-      } else if (target === "google" || target === "facebook" || target === "twitter" || target === "amazon") {
-        hackOutput += `
-          <span style="color: var(--neon-pink);">Nice try! Their security is pretty good.</span>
-          <span style="color: var(--text-secondary);">This is a simulation. Big tech companies have excellent security teams.</span>
-          <span style="color: var(--accent);">Did you know? Many of these companies offer bug bounty programs!</span>
-        `;
-      } else if (target === "portfolio" || target === "rashed" || target === "website") {
-        hackOutput += `
-          <span style="color: var(--accent);">Success! You've hacked... yourself.</span>
-          <span style="color: var(--text-secondary);">Congratulations, you're looking at the 'hacked' website right now! 🎉</span>
-        `;
-      } else {
-        hackOutput += `
-          <span style="color: var(--accent);">Simulated hack complete (not really)!</span>
-          <span style="color: var(--text-secondary);">This is just a fun demo. No actual hacking is taking place.</span>
-          <span style="color: var(--text-secondary);">Remember: Always practice ethical hacking and get proper authorization.</span>
-        `;
-      }
-      
-      return hackOutput;
+      return `
+        <span style="color: var(--neon-pink);">HACK SIMULATION: ${targetDisplayName}</span>
+        
+        <span style="color: var(--text-secondary);">Initializing attack vectors...</span>
+        <span style="color: var(--text-secondary);">Scanning for vulnerabilities...</span>
+        <span style="color: var(--text-secondary);">Establishing secure connection...</span>
+        <span style="color: var(--text-secondary);">Bypassing firewall...</span>
+        <span style="color: var(--text-secondary);">Cracking passwords...</span>
+        <span style="color: var(--text-secondary);">Gaining system access...</span>
+        
+        <span style="color: var(--accent);">ACCESS DENIED</span>
+        <span style="color: var(--text-secondary);">This is just a simulation! No actual hacking is happening.</span>
+        <span style="color: var(--text-secondary);">Hacking is illegal and unethical unless you have explicit permission.</span>
+        <span style="color: var(--text-secondary);">This command is just for fun in this portfolio demo.</span>
+      `;
     },
     sudo: (args) => {
       if (args.length === 0) {
         return `
           <span style="color: var(--neon-pink);">Usage: sudo [command]</span>
-          <span style="color: var(--text-secondary);">Example: sudo npm install</span>
         `;
       }
       
-      // When someone tries to use sudo, give them a funny response
       return `
-        <span style="color: var(--neon-pink);">Nice try! 🔒</span>
-        <span style="color: var(--text-secondary);">This may come as a shock, but this isn't actually a real terminal.</span>
-        <span style="color: var(--text-secondary);">Password incorrect. Also, there's no actual password. It's a website!</span>
-        <span style="color: var(--accent);">Joke: "Sudo make me a sandwich." "Ok."</span>
+        <span style="color: var(--accent);">Root Access Simulation</span>
+        <span style="color: var(--text-secondary);">Password required for guest: </span>
+        <span style="color: var(--neon-pink);">Access denied. Nice try! 😉</span>
+        <span style="color: var(--text-secondary);">This is a browser-based terminal simulation, not a real system.</span>
+        <span style="color: var(--text-secondary);">Sudo only works on actual Unix-based systems.</span>
+      `;
+    },
+    neofetch: () => {
+      const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari)[\/\s]*([\d.]+)/i);
+      const browserName = browser ? browser[1].charAt(0).toUpperCase() + browser[1].slice(1) : "Unknown";
+      const browserVersion = browser ? browser[2] : "0.0";
+      
+      // Get screen resolution
+      const resolution = `${window.screen.width}x${window.screen.height}`;
+      
+      return `
+        <span style="color: var(--accent);">                    .-/+oossssoo+/-.               </span> <span style="color: var(--text-secondary);">guest@portfolio</span>
+        <span style="color: var(--accent);">                /:+ssssssssssssssssss+:\\           </span> <span style="color: var(--text-secondary);">-----------------</span>
+        <span style="color: var(--accent);">             :/ssssssssssssssssssssssss:\\          </span> <span style="color: var(--text-secondary);">OS: WebPortfolio OS 2.0</span>
+        <span style="color: var(--accent);">           :/ossssssssssssssssssssssssssss:\\       </span> <span style="color: var(--text-secondary);">Host: ${browserName} ${browserVersion}</span>
+        <span style="color: var(--accent);">         :/sssssssssssss+::::::+sssssssssss:\\     </span> <span style="color: var(--text-secondary);">Kernel: HTML5 / CSS3 / JS</span>
+        <span style="color: var(--accent);">       :/ssssssssssss:.          .:ssssssssss+:    </span> <span style="color: var(--text-secondary);">Uptime: ${Math.floor(Math.random() * 10)} mins</span>
+        <span style="color: var(--accent);">     :/ssssssssssss/               /ssssssssss+:   </span> <span style="color: var(--text-secondary);">Packages: 42</span>
+        <span style="color: var(--accent);">   :/ssssssssssssss/              /sssssssssssss+: </span> <span style="color: var(--text-secondary);">Shell: BrowserShell 3.0</span>
+        <span style="color: var(--accent);">  :/ssssssssssssssss+:.        .:+sssssssssssssss+:</span> <span style="color: var(--text-secondary);">Resolution: ${resolution}</span>
+        <span style="color: var(--accent);"> :ssssssssssssssssssssss+:--:+ssssssssssssssssssss:</span> <span style="color: var(--text-secondary);">DE: Portfolio Terminal</span>
+        <span style="color: var(--accent);"> +ssssssssssssssssssssssssssssssssssssssssssssssss+</span> <span style="color: var(--text-secondary);">WM: Browser Window</span>
+        <span style="color: var(--accent);"> +sssssssssssssssssssssssssssssssssssssssssssssssss:</span> <span style="color: var(--text-secondary);">WM Theme: Cyberpunk</span>
+        <span style="color: var(--accent);"> -+ssssssssssssssssssssssssssssssssssssssssssssss+-</span> <span style="color: var(--text-secondary);">Terminal: WebConsole</span>
+        <span style="color: var(--accent);">  :+ssssssssssssssssssssssssssssssssssssssssss+:  </span> <span style="color: var(--text-secondary);">CPU: JavaScript V8</span>
+        <span style="color: var(--accent);">    -+ssssssssssssssssssssssssssssssssssss+-      </span> <span style="color: var(--text-secondary);">GPU: WebGL</span>
+        <span style="color: var(--accent);">      .-/+ssssssssssssssssssssssssss+/-.          </span> <span style="color: var(--text-secondary);">Memory: ${Math.floor(Math.random() * 1000) + 500}MB / 8GB</span>
+        <span style="color: var(--accent);">           .-:/++ossssssssssoo++/:-.               </span>
+        
+        <span style="color: var(--neon-pink);">███</span><span style="color: var(--accent);">███</span><span style="color: var(--neon-purple);">███</span><span style="color: var(--text-secondary);">███</span><span style="color: var(--text-secondary);">███</span><span style="color: var(--text-secondary);">███</span><span style="color: var(--text-secondary);">███</span><span style="color: var(--text-secondary);">███</span>
       `;
     },
     ssh: (args) => {
@@ -683,54 +543,6 @@ try {
         <span style="color: var(--accent);">Note: This is a simulated response. No actual network requests were made.</span>
       `;
     },
-    neofetch: () => {
-      const userAgent = navigator.userAgent;
-      let os = "Unknown OS";
-      
-      if (userAgent.indexOf("Windows") > -1) os = "Windows";
-      else if (userAgent.indexOf("Mac") > -1) os = "macOS";
-      else if (userAgent.indexOf("Linux") > -1) os = "Linux";
-      else if (userAgent.indexOf("Android") > -1) os = "Android";
-      else if (userAgent.indexOf("iPhone") > -1 || userAgent.indexOf("iPad") > -1) os = "iOS";
-      
-      const asciiArt = os === "Windows" ? 
-        `<span style="color: var(--neon-pink);">
-                      ,--------------,
-                    ,'               ,
-                   /                  \\
-                  |                    |
-                  |                    |
-                   \\                  /
-                    \`._           _,'
-                       \`-----------'
-        </span>` : 
-        `<span style="color: var(--accent);">
-                 .:'
-             __ :'__
-          .'´__\`-'__\`\`.
-         :__________.-'
-         :_________:
-          :_________\`-;
-           \`.__.-.__.'
-        </span>`;
-      
-      return `
-        ${asciiArt}
-        <span style="color: var(--accent);">user@portfolio</span>
-        <span style="color: var(--text-secondary);">---------------------</span>
-        <span style="color: var(--neon-pink);">OS:</span> ${os} (Browser-based simulation)
-        <span style="color: var(--neon-pink);">Host:</span> GitHub Pages
-        <span style="color: var(--neon-pink);">Kernel:</span> Browser ${navigator.appVersion.split(' ')[0]}
-        <span style="color: var(--neon-pink);">Uptime:</span> ${Math.floor(Math.random() * 60)} mins
-        <span style="color: var(--neon-pink);">Packages:</span> ${Math.floor(Math.random() * 1000) + 500} (npm)
-        <span style="color: var(--neon-pink);">Shell:</span> portfolio-bash 4.4
-        <span style="color: var(--neon-pink);">Terminal:</span> Rashed's Portfolio Terminal
-        <span style="color: var(--neon-pink);">CPU:</span> Web Browser @ ${Math.floor(Math.random() * 4) + 1}.${Math.floor(Math.random() * 9)}GHz
-        <span style="color: var(--neon-pink);">Memory:</span> ${Math.floor(Math.random() * 8) + 2}GB / 16GB
-        
-        <span style="color: var(--text-secondary);">Note: This is just a fun simulation of the neofetch command.</span>
-      `;
-    },
     uname: (args) => {
       if (args[0] === '-a') {
         const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari)[\/\s]*([\d.]+)/i);
@@ -748,292 +560,373 @@ try {
       `;
     },
     rm: (args) => {
-      if (args[0] === '-rf' && args[1] === '/') {
-        // When someone tries to delete everything
+      if (args.length >= 2 && args[0] === '-rf' && (args[1] === '/' || args[1] === '*')) {
+        // Simulate system destruction with animation
+        const originalContent = terminalOutput.innerHTML;
+        
+        // Start with a warning
         return `
-          <span style="color: var(--neon-pink);">Nice try! 🔒</span>
-          <span style="color: var(--text-secondary);">rm: it is dangerous to operate recursively on '/'</span>
-          <span style="color: var(--text-secondary);">rm: use --no-preserve-root to override this failsafe</span>
-          <span style="color: var(--accent);">Just kidding! This is a portfolio website, not a real terminal.</span>
-          <span style="color: var(--accent);">Your computer is safe! 😄</span>
+          <span style="color: var(--neon-pink);">WARNING: CRITICAL SYSTEM FILES DELETION INITIATED</span>
+          <span style="color: var(--text-secondary);">System integrity compromised...</span>
+          <span style="color: var(--text-secondary);">Shutting down file system protection...</span>
+          <span style="color: var(--text-secondary);">Deleting system files...</span>
+          <div class="ai-typing">
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+          </div>
+          <span style="color: var(--accent);">Just kidding! This is just a portfolio website.</span>
+          <span style="color: var(--text-secondary);">Your browser tab is safe. No real files were harmed in this simulation.</span>
+          <span style="color: var(--neon-pink);">Fun fact: The 'rm -rf /' command is often used in jokes but would be destructive on a real system.</span>
         `;
       }
       
       return `
-        <span style="color: var(--text-secondary);">rm: cannot remove '${args[args.length - 1]}': No such file or directory</span>
-        <span style="color: var(--text-secondary);">Note: This is a simulated terminal. No files will be deleted.</span>
+        <span style="color: var(--text-secondary);">This is a simulated environment. No files were actually removed.</span>
+        <span style="color: var(--accent);">Usage: rm -rf [path]</span>
+        <span style="color: var(--text-secondary);">Try 'rm -rf /' for a surprise!</span>
+      `;
+    },
+    ls: () => {
+      return `
+        <span style="color: var(--neon-pink);">Directory listing:</span>
+        <span style="color: var(--accent);">about/</span>
+        <span style="color: var(--accent);">projects/</span>
+        <span style="color: var(--accent);">skills/</span>
+        <span style="color: var(--accent);">contact/</span>
+        <span style="color: var(--text-secondary);">resume.pdf</span>
+        <span style="color: var(--text-secondary);">README.md</span>
+        <span style="color: var(--text-secondary);">config.json</span>
+        <span style="color: var(--text-secondary);">.gitignore</span>
+        <span style="color: var(--text-secondary);">.env</span>
+        <span style="color: var(--text-secondary);">package.json</span>
+      `;
+    },
+    whoami: () => {
+      return `
+        <span style="color: var(--text-secondary);">guest@portfolio ~ </span>
+        <span style="color: var(--accent);">You are a visitor exploring this portfolio!</span>
+        <span style="color: var(--text-secondary);">Your current permission level: Read-only</span>
+        <span style="color: var(--text-secondary);">Want admin access? Try 'sudo' command - just kidding, that won't work! 😉</span>
       `;
     },
     joke: () => {
       const jokes = [
         "Why do programmers prefer dark mode? Because light attracts bugs!",
-        "Why did the developer go broke? Because he used up all his cache!",
-        "Why do Java developers wear glasses? Because they don't C#!",
         "How many programmers does it take to change a light bulb? None, that's a hardware problem!",
-        "A SQL query walks into a bar, walks up to two tables and asks, 'Can I join you?'",
-        "Why was the JavaScript developer sad? Because he didn't know how to null his feelings!",
-        "What's a pirate's favorite programming language? R!",
-        "Why did the functions stop calling each other? They had too many arguments!",
-        "How do you comfort a JavaScript bug? You console it!",
+        "Why do Java developers wear glasses? Because they don't C#!",
+        "A SQL query walks into a bar, approaches two tables and asks, 'Can I join you?'",
+        "Why do programmers always mix up Halloween and Christmas? Because Oct 31 = Dec 25!",
+        "Why was the JavaScript developer sad? Because he didn't know how to 'null' his feelings!",
         "Why did the developer go broke? Because he used up all his cache!",
-        "Why do programmers always mix up Halloween and Christmas? Because Oct 31 == Dec 25!",
         "Why do programmers hate nature? It has too many bugs!",
-        "Why don't programmers like to go outside? The sunlight causes too many reflections!",
-        "Why do programmers always confuse Halloween and Christmas? Because Oct 31 == Dec 25."
+        "What's a programmer's favorite hangout place? The Foo Bar!",
+        "Why don't programmers like to go outside? The sun causes too many reflections!"
       ];
       
+      const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
       return `
-        <span style="color: var(--accent);">Developer Joke:</span>
-        <span style="color: var(--text-secondary);">${jokes[Math.floor(Math.random() * jokes.length)]}</span>
+        <span style="color: var(--neon-pink);">Developer Joke:</span>
+        <span style="color: var(--text-secondary);">${randomJoke}</span>
       `;
     },
     ai: (args) => {
       if (args.length === 0) {
         return `
-          <span style="color: var(--neon-pink);">Usage: ai [command] [prompt]</span>
-          <span style="color: var(--text-secondary);">Commands: chat, generate, predict</span>
-          <span style="color: var(--text-secondary);">Example: ai chat Tell me about quantum computing</span>
+          <span style="color: var(--neon-pink);">AI Assistant activated</span>
+          <span style="color: var(--text-secondary);">How can I help you today?</span>
+          <span style="color: var(--text-secondary);">Try:</span>
+          <span style="color: var(--accent);">ai chat [your question]</span>
+          <span style="color: var(--accent);">ai generate [code description]</span>
+          <span style="color: var(--accent);">ai predict [domain]</span>
         `;
       }
       
       const subCommand = args[0];
       const prompt = args.slice(1).join(' ');
       
-      if (!prompt) {
+      if (subCommand === 'chat') {
+        if (!prompt) {
+          return `
+            <span style="color: var(--neon-pink);">AI Chat activated</span>
+            <span style="color: var(--text-secondary);">Please provide a question or topic to discuss.</span>
+            <span style="color: var(--text-secondary);">Example: ai chat What is full stack development?</span>
+          `;
+        }
+        
+        // Simulate typing response with a delay
+        setTimeout(() => {
+          const aiResponses = {
+            "hello": "Hello! How can I assist you with your software development or technology needs today?",
+            "help": "I can help with various topics including programming, cloud infrastructure, healthcare tech, or development practices. Just ask a specific question!",
+            "default": `Based on your query about "${prompt}", I'd suggest exploring modern development frameworks and cloud-native architectures. Would you like more specific information about any particular technology?`
+          };
+          
+          let response = aiResponses[prompt.toLowerCase()] || aiResponses.default;
+          
+          // Remove the typing indicator and add the response
+          const typingElement = document.querySelector('.ai-typing');
+          if (typingElement) {
+            typingElement.parentNode.removeChild(typingElement);
+          }
+          
+          terminalOutput.innerHTML += `<div><span style="color: var(--accent);">AI Assistant:</span> ${response}</div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, 1500);
+        
         return `
-          <span style="color: var(--neon-pink);">Please provide a prompt.</span>
-          <span style="color: var(--text-secondary);">Example: ai ${subCommand} Tell me about quantum computing</span>
+          <span style="color: var(--neon-pink);">AI processing: "${prompt}"</span>
+          <div class="ai-typing">
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+          </div>
         `;
       }
       
-      let aiOutput = `<span style="color: var(--accent);">AI Assistant (${subCommand}):</span><br>`;
-      aiOutput += `<span style="color: var(--text-secondary);">Query: "${prompt}"</span><br>`;
-      
-      // Show typing animation
-      const typingAnimation = `
-        <div class="ai-typing">
-          <div class="ai-typing-dot"></div>
-          <div class="ai-typing-dot"></div>
-          <div class="ai-typing-dot"></div>
-        </div>
-      `;
-      
-      terminalOutput.innerHTML += `<div>${aiOutput}${typingAnimation}</div>`;
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-      
-      // Simulate AI thinking
-      setTimeout(() => {
-        // Remove typing animation
-        const lastOutput = terminalOutput.lastElementChild;
-        if (lastOutput) {
-          lastOutput.innerHTML = aiOutput;
+      if (subCommand === 'generate') {
+        if (!prompt) {
+          return `
+            <span style="color: var(--neon-pink);">AI Code Generator activated</span>
+            <span style="color: var(--text-secondary);">Please provide a description of the code you want to generate.</span>
+            <span style="color: var(--text-secondary);">Example: ai generate simple React component</span>
+          `;
         }
         
-        let response = '';
-        
-        if (subCommand === 'chat') {
-          // Simulated AI chat responses based on keywords in the prompt
-          if (prompt.match(/quantum|physics|computer|computing/i)) {
-            response = "Quantum computing leverages quantum mechanics to process information in ways classical computers cannot. Unlike traditional bits, quantum bits (qubits) can exist in multiple states simultaneously through superposition, enabling parallel computation at scale. Current quantum systems are still experimental but show promise for cryptography, optimization problems, and simulating quantum systems.";
-          } else if (prompt.match(/machine learning|ml|ai|artificial intelligence|deep learning/i)) {
-            response = "Machine learning is a subset of AI that enables systems to learn from data without explicit programming. Deep learning, a specialized form that uses neural networks with many layers, has revolutionized fields like computer vision and natural language processing. The field continues to evolve with techniques like transformers, reinforcement learning, and generative models creating increasingly capable AI systems.";
-          } else if (prompt.match(/web|development|code|programming|software/i)) {
-            response = "Modern web development encompasses a vast ecosystem of frameworks, languages, and tools. Front-end technologies like React, Vue, and Angular enable dynamic user interfaces, while back-end systems might use Node.js, Python, or Go. Full-stack developers work across both domains, often implementing DevOps practices and cloud services for deployment. Web Assembly, Progressive Web Apps, and serverless architectures represent cutting-edge innovations in the field.";
+        // Simulate code generation with a delay
+        setTimeout(() => {
+          let generatedCode = '';
+          
+          if (prompt.includes('react')) {
+            generatedCode = `import React, { useState } from 'react';\n\nconst Button = ({ text, onClick }) => {\n  const [isHovered, setIsHovered] = useState(false);\n  \n  return (\n    <button\n      onClick={onClick}\n      onMouseEnter={() => setIsHovered(true)}\n      onMouseLeave={() => setIsHovered(false)}\n      style={{\n        background: isHovered ? '#ff2e63' : '#64ffda',\n        color: '#0a192f',\n        border: 'none',\n        padding: '10px 20px',\n        borderRadius: '5px',\n        cursor: 'pointer',\n        transition: 'all 0.3s ease'\n      }}\n    >\n      {text}\n    </button>\n  );\n};\n\nexport default Button;`;
+          } else if (prompt.includes('python')) {
+            generatedCode = `def process_data(data_list, filter_func=None):\n    \"""Process a list of data items with optional filtering\n    \n    Args:\n        data_list (list): The input data to process\n        filter_func (callable, optional): A function to filter items\n        \n    Returns:\n        list: The processed data\n    \"""\n    result = []\n    \n    # Apply filtering if provided\n    if filter_func is not None:\n        data_list = [item for item in data_list if filter_func(item)]\n    \n    # Process each item\n    for item in data_list:\n        try:\n            processed = item * 2 if isinstance(item, (int, float)) else str(item).upper()\n            result.append(processed)\n        except Exception as e:\n            print(f"Error processing {item}: {e}")\n    \n    return result`;
           } else {
-            response = "I'm a simulated AI assistant on this portfolio site. While I can provide information on various topics like technology, science, and programming, I don't have real-time capabilities or access to external data. This is a demonstration of how AI interfaces might work in web applications. For comprehensive AI assistance, consider tools like ChatGPT, Claude, or other dedicated AI platforms.";
+            generatedCode = `// Generated function based on prompt: "${prompt}"\nfunction processData(data) {\n  // Input validation\n  if (!data || typeof data !== 'object') {\n    throw new Error('Invalid input data');\n  }\n  \n  // Transform the data\n  const result = Object.entries(data).map(([key, value]) => {\n    return {\n      id: key,\n      value: typeof value === 'string' ? value.toUpperCase() : value,\n      timestamp: new Date().toISOString()\n    };\n  });\n  \n  // Sort results by ID\n  return result.sort((a, b) => a.id.localeCompare(b.id));\n}`;
           }
-        } else if (subCommand === 'generate') {
-          // Simulated code generation
-          if (prompt.match(/react|component|jsx/i)) {
-            response = `<pre style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; overflow-x: auto;">import React, { useState, useEffect } from 'react';
-
-const AIComponent = ({ prompt, temperature = 0.7 }) => {
-  const [response, setResponse] = useState('');
-  const [loading, setLoading] = useState(false);
-  
-  useEffect(() => {
-    const generateResponse = async () => {
-      if (!prompt) return;
-      
-      setLoading(true);
-      try {
-        // In a real component, this would call an AI API
-        const result = await fetchAIResponse(prompt, temperature);
-        setResponse(result);
-      } catch (error) {
-        console.error('AI generation failed:', error);
-      } finally {
-        setLoading(false);
+          
+          // Remove the typing indicator and add the response
+          const typingElement = document.querySelector('.ai-typing');
+          if (typingElement) {
+            typingElement.parentNode.removeChild(typingElement);
+          }
+          
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Generated Code:</span>
+              <pre style="background: rgba(10, 25, 47, 0.6); padding: 10px; border-radius: 5px; overflow-x: auto; margin-top: 10px; border-left: 2px solid var(--neon-pink);">${generatedCode}</pre>
+            </div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, 2000);
+        
+        return `
+          <span style="color: var(--neon-pink);">Generating code for: "${prompt}"</span>
+          <div class="ai-typing">
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+          </div>
+        `;
       }
-    };
-    
-    generateResponse();
-  }, [prompt, temperature]);
-  
-  return (
-    <div className="ai-response-container">
-      {loading ? (
-        <div className="loading-indicator">Generating response...</div>
-      ) : (
-        <div className="response">{response}</div>
-      )}
-    </div>
-  );
-};
-
-export default AIComponent;</pre>`;
-          } else if (prompt.match(/python|machine learning|ml|algorithm/i)) {
-            response = `<pre style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; overflow-x: auto;">import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
-
-def train_ai_model(data, labels, test_size=0.2, random_state=42):
-    """
-    Train a machine learning model on the provided data.
-    
-    Args:
-        data: Features for training
-        labels: Target values
-        test_size: Proportion of data to use for testing
-        random_state: Random seed for reproducibility
-    
-    Returns:
-        Trained model and performance metrics
-    """
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(
-        data, labels, test_size=test_size, random_state=random_state
-    )
-    
-    # Initialize and train model
-    model = RandomForestClassifier(n_estimators=100, random_state=random_state)
-    model.fit(X_train, y_train)
-    
-    # Evaluate model
-    predictions = model.predict(X_test)
-    accuracy = accuracy_score(y_test, predictions)
-    report = classification_report(y_test, predictions)
-    
-    return {
-        'model': model,
-        'accuracy': accuracy,
-        'report': report,
-        'feature_importance': model.feature_importances_
-    }
-
-# Example usage
-if __name__ == "__main__":
-    # Generate synthetic data
-    X = np.random.randn(1000, 10)
-    y = (X[:, 0] + X[:, 1] > 0).astype(int)
-    
-    results = train_ai_model(X, y)
-    print(f"Model accuracy: {results['accuracy']:.2f}")
-    print(f"\\nClassification report:\\n{results['report']}")</pre>`;
-          } else {
-            response = "I can generate sample code snippets based on prompts. Try specifying a programming language or framework like \"generate a React component for user authentication\" or \"generate a Python script for data analysis\".";
-          }
-        } else if (subCommand === 'predict') {
-          // Simulated predictions
-          if (prompt.match(/stock|market|price|trend|investment/i)) {
-            const stockNames = ['AAPL', 'GOOGL', 'AMZN', 'MSFT', 'META'];
-            const randomStock = stockNames[Math.floor(Math.random() * stockNames.length)];
-            const currentValue = (Math.random() * 200 + 100).toFixed(2);
-            const prediction = (currentValue * (Math.random() * 0.2 + 0.9)).toFixed(2);
-            const sentiment = Math.random() > 0.5 ? 'Bullish' : 'Bearish';
-            const confidence = (Math.random() * 30 + 70).toFixed(1);
-            
-            response = `<div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 5px;">
-  <div style="font-weight: bold; color: var(--accent);">Market Prediction for ${randomStock}</div>
-  <div>Current Value: $${currentValue}</div>
-  <div>Predicted Value (30 days): $${prediction}</div>
-  <div>Sentiment: ${sentiment}</div>
-  <div>Confidence: ${confidence}%</div>
-  <div style="font-size: 0.8em; margin-top: 10px; color: var(--text-secondary);">
-    Note: This is a simulated prediction for demonstration purposes only. Never make investment decisions based on simulated data.
-  </div>
-</div>`;
-          } else if (prompt.match(/weather|temperature|forecast|rain|snow/i)) {
-            const cities = ['New York', 'London', 'Tokyo', 'Sydney', 'Paris', 'Berlin'];
-            const randomCity = cities[Math.floor(Math.random() * cities.length)];
-            const currentTemp = Math.floor(Math.random() * 30 + 5);
-            const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Partly Cloudy', 'Thunderstorms', 'Snowy', 'Foggy'];
-            const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
-            
-            response = `<div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 5px;">
-  <div style="font-weight: bold; color: var(--accent);">Weather Forecast for ${randomCity}</div>
-  <div>Current Temperature: ${currentTemp}°C</div>
-  <div>Conditions: ${randomCondition}</div>
-  <div>Humidity: ${Math.floor(Math.random() * 50 + 30)}%</div>
-  <div>Wind: ${Math.floor(Math.random() * 20 + 5)} km/h</div>
-  <div style="font-size: 0.8em; margin-top: 10px; color: var(--text-secondary);">
-    Note: This is a simulated forecast for demonstration purposes only.
-  </div>
-</div>`;
-          } else {
-            response = "I can make predictions in various domains like weather forecasts, market trends, or traffic patterns. Try asking something like \"predict stock market trends\" or \"predict weather for tomorrow\".";
-          }
-        } else {
-          response = "Unknown AI command. Available commands: chat, generate, predict";
+      
+      if (subCommand === 'predict') {
+        if (!prompt) {
+          return `
+            <span style="color: var(--neon-pink);">AI Prediction Engine activated</span>
+            <span style="color: var(--text-secondary);">Please provide a domain for predictions.</span>
+            <span style="color: var(--text-secondary);">Example: ai predict healthcare</span>
+          `;
         }
         
-        // Add response with typing effect
-        let i = 0;
-        const typeResponse = () => {
-          if (i < response.length) {
-            const lastOutput = terminalOutput.lastElementChild;
-            if (lastOutput) {
-              lastOutput.innerHTML = aiOutput + response.substring(0, i + 1);
-              terminalOutput.scrollTop = terminalOutput.scrollHeight;
-              i++;
-              
-              // Type faster for longer responses
-              const typingSpeed = response.length > 500 ? 5 : 15;
-              setTimeout(typeResponse, typingSpeed);
-            }
+        // Simulate prediction with a delay
+        setTimeout(() => {
+          let prediction = '';
+          
+          if (prompt.includes('health') || prompt.includes('medical')) {
+            prediction = "The healthcare industry will see increased adoption of AI for diagnostic assistance, remote patient monitoring via IoT devices, and blockchain for secure medical records. Telehealth will become a permanent fixture with enhanced AR/VR capabilities for remote consultations.";
+          } else if (prompt.includes('tech') || prompt.includes('software')) {
+            prediction = "Software development will shift toward more serverless architectures, AI-assisted coding, and increased adoption of WebAssembly. Low-code platforms will mature for business applications, while complex systems will leverage more sophisticated type systems and formal verification.";
+          } else if (prompt.includes('web') || prompt.includes('frontend')) {
+            prediction = "Web development will continue to embrace edge computing, with more application logic moving to CDN edges. WebGPU will enable more advanced graphics processing directly in browsers, and CSS will gain more powerful layout capabilities reducing the need for JavaScript-based solutions.";
+          } else {
+            prediction = `Based on current trends in ${prompt}, we can expect significant disruption from AI, automation, and decentralized technologies. Organizations that embrace these changes while focusing on human-centered design will likely outperform competitors.`;
           }
-        };
+          
+          // Remove the typing indicator and add the response
+          const typingElement = document.querySelector('.ai-typing');
+          if (typingElement) {
+            typingElement.parentNode.removeChild(typingElement);
+          }
+          
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">AI Prediction for ${prompt}:</span>
+              <p style="border-left: 2px solid var(--neon-purple); padding-left: 10px; margin: 10px 0;">${prediction}</p>
+            </div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, 2000);
         
-        typeResponse();
-      }, 1500);
+        return `
+          <span style="color: var(--neon-pink);">Analyzing trends and generating predictions for: "${prompt}"</span>
+          <div class="ai-typing">
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+          </div>
+        `;
+      }
       
-      return null; // Return null to prevent default output handling
+      return `
+        <span style="color: var(--neon-pink);">Unknown AI command: ${subCommand}</span>
+        <span style="color: var(--text-secondary);">Available AI commands:</span>
+        <span style="color: var(--accent);">ai chat [your question]</span>
+        <span style="color: var(--accent);">ai generate [code description]</span>
+        <span style="color: var(--accent);">ai predict [domain]</span>
+      `;
     },
   };
-
-// Handle input with history
-terminalInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    const cmd = terminalInput.value;
-    if (cmd.trim() !== '') {
-      commandHistory.unshift(cmd);
-      commandHistory.push(cmd);
-      historyIndex = commandHistory.length;
-    }
-    processCommand(cmd);
-    terminalInput.value = '';
-  } else if (e.key === 'ArrowUp') {
-    if (historyIndex > 0) {
-      historyIndex--;
-      terminalInput.value = commandHistory[historyIndex];
-      // Move cursor to end
+  
+  // Process commands function
+  function processCommand(cmd) {
+    cmd = cmd.trim().toLowerCase();
+    
+    if (cmd === '') return;
+    
+    // Add command to history
+    commandHistory.unshift(cmd);
+    if (commandHistory.length > 20) commandHistory.pop(); // Limit history size
+    historyIndex = -1;
+    
+    // Add command to output
+    terminalOutput.innerHTML += `<div><span style="color: var(--text-secondary);">$ ${cmd}</span></div>`;
+    
+    // Process command
+    const args = cmd.split(' ');
+    const mainCommand = args[0];
+    
+    // Show matrix effect for AI-related commands
+    if (mainCommand === 'ai') {
+      showMatrixEffect(true);
+      
+      // Hide matrix effect after a delay
       setTimeout(() => {
-        terminalInput.selectionStart = terminalInput.selectionEnd = terminalInput.value.length;
-      }, 0);
+        showMatrixEffect(false);
+      }, 5000);
     }
-    e.preventDefault();
-  } else if (e.key === 'ArrowDown') {
-    if (historyIndex < commandHistory.length - 1) {
-      historyIndex++;
-      terminalInput.value = commandHistory[historyIndex];
+    
+    // Console log for debugging
+    console.log('Processing command:', mainCommand, args);
+    
+    if (commands.hasOwnProperty(mainCommand)) {
+      // Call the command handler directly
+      try {
+        const output = commands[mainCommand](args.slice(1));
+        if (output) {
+          terminalOutput.innerHTML += `<div>${output}</div>`;
+        }
+      } catch (error) {
+        console.error('Error executing command:', error);
+        terminalOutput.innerHTML += `<div><span style="color: var(--neon-pink);">Error executing command: ${error.message}</span></div>`;
+      }
+    } else if (mainCommand === 'rm' && args.length > 1) {
+      // Special case for rm -rf
+      const output = commands.rm ? commands.rm(args.slice(1)) : `<span style="color: var(--neon-pink);">Command not implemented: rm</span>`;
+      if (output) {
+        terminalOutput.innerHTML += `<div>${output}</div>`;
+      }
+    } else if (mainCommand === 'cd' || mainCommand === 'mkdir' || mainCommand === 'touch' || 
+               mainCommand === 'mv' || mainCommand === 'cp' || mainCommand === 'chmod') {
+      // Handle common Unix commands with a joke
+      terminalOutput.innerHTML += `
+        <div>
+          <span style="color: var(--neon-pink);">This is a portfolio website, not a real terminal.</span>
+          <span style="color: var(--text-secondary);">If you're trying to use real Unix commands, you might be taking this simulation too seriously! 😉</span>
+          <span style="color: var(--accent);">Try 'help' to see available demo commands.</span>
+        </div>`;
+    } else if (mainCommand.startsWith('apt') || mainCommand.startsWith('yum') || 
+              mainCommand.startsWith('brew') || mainCommand.startsWith('npm') ||
+              mainCommand.startsWith('pip')) {
+      // Package manager commands
+      terminalOutput.innerHTML += `
+        <div>
+          <span style="color: var(--neon-pink);">Package manager detected!</span>
+          <span style="color: var(--text-secondary);">This is a browser-based terminal simulation, not a real package manager.</span>
+          <span style="color: var(--text-secondary);">You can't install packages in a website... yet!</span>
+          <span style="color: var(--accent);">Try 'help' to see what you can actually do here.</span>
+        </div>`;
+    } else if (mainCommand === 'exit' || mainCommand === 'quit' || mainCommand === 'logout') {
+      // Exit commands
+      terminalOutput.innerHTML += `
+        <div>
+          <span style="color: var(--accent);">You can't exit a website terminal!</span>
+          <span style="color: var(--text-secondary);">Just close the browser tab like a normal person. 😄</span>
+          <span style="color: var(--neon-pink);">Fun fact: Developers spend an average of 30% of their day trying to exit Vim.</span>
+        </div>`;
     } else {
-      historyIndex = commandHistory.length;
-      terminalInput.value = '';
+      // Command not found
+      terminalOutput.innerHTML += `
+        <div>
+          <span style="color: var(--neon-pink);">Command not found: ${cmd}</span>
+          <span style="color: var(--text-secondary);">This is a portfolio website with simulated terminal functionality.</span>
+          <span style="color: var(--text-secondary);">Type 'help' to see available commands.</span>
+          <span style="color: var(--accent);">Trying to hack? Try the 'hack' command instead!</span>
+        </div>`;
     }
-    e.preventDefault();
+    
+    // Scroll to bottom
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
   }
-});
+  
+  // Add keyboard navigation for keyboard events - one event handler for everything
+  terminalInput.addEventListener('keydown', function(e) {
+    // Process command on Enter
+    if (e.key === 'Enter') {
+      const cmd = this.value;
+      if (cmd.trim() !== '') {
+        processCommand(cmd);
+      }
+      this.value = '';
+    }
+    // Up arrow for previous command
+    else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length > 0) {
+        historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+        this.value = commandHistory[historyIndex];
+        // Move cursor to end
+        setTimeout(() => {
+          this.selectionStart = this.selectionEnd = this.value.length;
+        }, 0);
+      }
+    }
+    // Down arrow for next command
+    else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex--;
+        this.value = commandHistory[historyIndex];
+      } else if (historyIndex === 0) {
+        historyIndex = -1;
+        this.value = '';
+      }
+    }
+    // Tab for auto-completion
+    else if (e.key === 'Tab') {
+      e.preventDefault();
+      const input = this.value.trim();
+      const suggestions = autoCompleteCommand(input);
+      
+      if (suggestions.length === 1) {
+        this.value = suggestions[0];
+      } else if (suggestions.length > 0) {
+        // Show all suggestions
+        terminalSuggestions.innerHTML = suggestions
+          .map(s => `<div class="suggestion">${s}</div>`)
+          .join('');
+        terminalSuggestions.style.display = 'block';
+      }
+    }
+  });
 
 } catch (e) {
   showError('Terminal functionality failed: ' + e.message);
@@ -1155,88 +1048,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-
-// Process commands
-function processCommand(cmd) {
-  cmd = cmd.trim().toLowerCase();
-  
-  if (cmd === '') return;
-  
-  // Add command to history
-  commandHistory.unshift(cmd);
-  if (commandHistory.length > 20) commandHistory.pop(); // Limit history size
-  historyIndex = -1;
-  
-  // Add command to output
-  terminalOutput.innerHTML += `<div><span style="color: var(--text-secondary);">$ ${cmd}</span></div>`;
-  
-  // Process command
-  const args = cmd.split(' ');
-  const mainCommand = args[0];
-  
-  // Show matrix effect for AI-related commands
-  if (mainCommand === 'ai') {
-    showMatrixEffect(true);
-    
-    // Hide matrix effect after a delay
-    setTimeout(() => {
-      showMatrixEffect(false);
-    }, 5000);
-  }
-  
-  if (commands[mainCommand]) {
-    const output = commands[mainCommand](args.slice(1));
-    if (output) {
-      terminalOutput.innerHTML += `<div>${output}</div>`;
-    }
-  } else if (mainCommand === 'rm' && args.length > 1) {
-    // Special case for rm -rf
-    const output = commands.rm(args.slice(1));
-    if (output) {
-      terminalOutput.innerHTML += `<div>${output}</div>`;
-    }
-  } else if (mainCommand === 'cd' || mainCommand === 'mkdir' || mainCommand === 'touch' || 
-             mainCommand === 'mv' || mainCommand === 'cp' || mainCommand === 'chmod') {
-    // Handle common Unix commands with a joke
-    terminalOutput.innerHTML += `
-      <div>
-        <span style="color: var(--neon-pink);">This is a portfolio website, not a real terminal.</span>
-        <span style="color: var(--text-secondary);">If you're trying to use real Unix commands, you might be taking this simulation too seriously! 😉</span>
-        <span style="color: var(--accent);">Try 'help' to see available demo commands.</span>
-      </div>`;
-  } else if (mainCommand.startsWith('apt') || mainCommand.startsWith('yum') || 
-            mainCommand.startsWith('brew') || mainCommand.startsWith('npm') ||
-            mainCommand.startsWith('pip')) {
-    // Package manager commands
-    terminalOutput.innerHTML += `
-      <div>
-        <span style="color: var(--neon-pink);">Package manager detected!</span>
-        <span style="color: var(--text-secondary);">This is a browser-based terminal simulation, not a real package manager.</span>
-        <span style="color: var(--text-secondary);">You can't install packages in a website... yet!</span>
-        <span style="color: var(--accent);">Try 'help' to see what you can actually do here.</span>
-      </div>`;
-  } else if (mainCommand === 'exit' || mainCommand === 'quit' || mainCommand === 'logout') {
-    // Exit commands
-    terminalOutput.innerHTML += `
-      <div>
-        <span style="color: var(--accent);">You can't exit a website terminal!</span>
-        <span style="color: var(--text-secondary);">Just close the browser tab like a normal person. 😄</span>
-        <span style="color: var(--neon-pink);">Fun fact: Developers spend an average of 30% of their day trying to exit Vim.</span>
-      </div>`;
-  } else {
-    // Command not found
-    terminalOutput.innerHTML += `
-      <div>
-        <span style="color: var(--neon-pink);">Command not found: ${cmd}</span>
-        <span style="color: var(--text-secondary);">This is a portfolio website with simulated terminal functionality.</span>
-        <span style="color: var(--text-secondary);">Type 'help' to see available commands.</span>
-        <span style="color: var(--accent);">Trying to hack? Try the 'hack' command instead!</span>
-      </div>`;
-  }
-  
-  // Scroll to bottom
-  terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
 
 // Matrix Rain Effect
 function showMatrixEffect(show) {
