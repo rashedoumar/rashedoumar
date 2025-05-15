@@ -910,11 +910,26 @@ try {
 try {
   const cursor = document.getElementById('customCursor');
   if (!cursor) throw new Error('Custom cursor not found');
-  document.addEventListener('mousemove', e => {
+  
+  document.addEventListener('mousemove', (e) => {
     cursor.style.left = `${e.clientX}px`;
     cursor.style.top = `${e.clientY}px`;
-    const section = document.elementFromPoint(e.clientX, e.clientY)?.closest('.section');
+    
+    const section = document.querySelector('section:hover');
     cursor.style.borderColor = section?.id === 'skills' ? '#ff2e63' : section?.id === 'projects' ? '#7b2cbf' : '#64ffda';
+    
+    // Check if hovering over interactive elements
+    const isOverInteractive = e.target.matches('a, button, .logo, .nav-links a, input, textarea, .submit-btn, .project-links a, .skill-cube, .social-links a, #themeToggle, .hamburger');
+    
+    if (isOverInteractive) {
+      cursor.style.width = '0';
+      cursor.style.height = '0';
+      cursor.style.opacity = '0';
+    } else {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      cursor.style.opacity = '1';
+    }
   });
 } catch (e) {
   showError('Custom cursor failed: ' + e.message);
