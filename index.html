@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rashed M Omar - Senior Full Stack Engineer at Vytalize Health with expertise in cloud infrastructure, healthcare technology, and secure application development.">
+  <title>Rashed M Omar - Vytalize Health</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Particle.js Background -->
+  <div id="particles-bg" style="width:100%;height:100%;position:fixed;top:0;left:0;z-index:-4;"></div>
+
+  <!-- Parallax Layer -->
+  <div class="parallax-layer" id="parallaxLayer"></div>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="customCursor"></div>
+  <!-- Error Toast -->
+  <div class="error-toast" id="errorToast">Error: Something went wrong!</div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <div class="logo">Rashed M Omar - Vytalize Health</div>
+      <div class="hamburger">☰</div>
+      <ul class="nav-links">
+        <li><a href="#about" aria-label="About section">About</a></li>
+        <li><a href="#skills" aria-label="Skills section">Skills</a></li>
+        <li><a href="#projects" aria-label="Projects section">Projects</a></li>
+        <li><a href="#experience" aria-label="Experience section">Experience</a></li>
+        <li><a href="#education" aria-label="Education section">Education</a></li>
+        <li><a href="#contact" aria-label="Contact section">Contact</a></li>
+      </ul>
+    <div id="themeToggle">
+      <span class="toggle-indicator"></span>
+    </div>
+    </div>
+  </nav>
+
+  <!-- Floating Elements Background -->
+  <div class="floating-elements">
+    <div class="floating-element" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-element" style="left: 25%; animation-delay: 3s;"></div>
+    <div class="floating-element" style="left: 40%; animation-delay: 6s;"></div>
+    <div class="floating-element" style="left: 65%; animation-delay: 9s;"></div>
+    <div class="floating-element" style="left: 80%; animation-delay: 12s;"></div>
+    <div class="floating-element" style="left: 90%; animation-delay: 15s;"></div>
+    <div class="floating-element" style="left: 15%; animation-delay: 18s;"></div>
+    <div class="floating-element" style="left: 55%; animation-delay: 21s;"></div>
+    <div class="floating-element" style="left: 70%; animation-delay: 24s;"></div>
+    <div class="floating-element" style="left: 30%; animation-delay: 27s;"></div>
+  </div>
+
+  <!-- Hero Section with Interactive Terminal -->
+  <section class="hero" id="about">
+    <div class="container">
+      <div class="terminal-node">
+        <div class="node-header">
+          <div class="node-buttons">
+            <div class="node-button"></div>
+            <div class="node-button"></div>
+            <div class="node-button"></div>
+          </div>
+          <div class="node-title">rashed@vytalize:~$</div>
+        </div>
+        <div class="node-body">
+          <div class="terminal-output" id="terminalOutput" role="log" aria-live="polite"></div>
+          <div class="terminal-input">
+            <span class="terminal-prompt">$</span>
+            <input type="text" id="terminalInput" autofocus aria-label="Terminal input" aria-describedby="terminalSuggestions">
+          </div>
+          <div class="terminal-suggestions" id="terminalSuggestions"></div>
+          <div class="spaceship-game" id="spaceshipGame">
+            <div class="spaceship" id="spaceship"></div>
+            <div class="game-stats" id="gameStats">Score: 0</div>
+            <div class="game-over" id="gameOver">Game Over!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section" id="skills">
+    <div class="container">
+      <h2 class="section-title">Skill Hologrid</h2>
+      <div class="skill-grid">
+        <div class="skill-cube">AWS<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">Docker<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">Terraform<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Kubernetes<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Node.js<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">React<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">Python<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">PHP<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">Laravel<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">TypeScript<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Salesforce<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">MySQL<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">PostgreSQL<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">MongoDB<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">Redis<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">CI/CD<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">GitHub Actions<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Jenkins<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">Ansible<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">HIPAA<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">TensorFlow<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">PyTorch<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">NLP<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">AWS SageMaker<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">Azure<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Windows Server<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Active Directory<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">GraphQL<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">REST API<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">Microservices<div class="skill-tooltip">Expert</div></div>
+        <div class="skill-cube">Serverless<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Elasticsearch<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">Java<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">Angular<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">GCP<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">PowerShell<div class="skill-tooltip">Advanced</div></div>
+        <div class="skill-cube">Scikit-learn<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">WebSockets<div class="skill-tooltip">Intermediate</div></div>
+        <div class="skill-cube">Solr<div class="skill-tooltip">Intermediate</div></div>
+      </div>
+      <div class="skill-stats">Skill Uptime: <span id="skillUptime">99.00%</span></div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="section" id="projects">
+    <div class="container">
+      <h2 class="section-title">Project Holograms</h2>
+      <div class="project-timeline">
+        <div class="project-hologram">
+          <div class="project-inner">
+            <div class="project-front">
+              <div class="project-placeholder">Banzai</div>
+              <div class="project-content">
+                <h3>Banzai Collaboration Tracking</h3>
+                <p>Serverless platform for healthcare collaboration, HIPAA-compliant.</p>
+                <div class="project-metrics">Uptime: 99.99%</div>
+                <div class="project-links">
+                  <a href="#">Case Study</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-back">
+              <div class="project-tags">
+                <span class="project-tag">TypeScript</span>
+                <span class="project-tag">Node.js</span>
+                <span class="project-tag">React</span>
+                <span class="project-tag">AWS Lambda</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hologram">
+          <div class="project-inner">
+            <div class="project-front">
+              <div class="project-placeholder">Care</div>
+              <div class="project-content">
+                <h3>Care Patient Dashboard</h3>
+                <p>Patient health dashboard with Twilio integration and microservices.</p>
+                <div class="project-metrics">Deployments: 50+/month</div>
+                <div class="project-links">
+                  <a href="#">Demo</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-back">
+              <div class="project-tags">
+                <span class="project-tag">Laravel</span>
+                <span class="project-tag">Node.js</span>
+                <span class="project-tag">React</span>
+                <span class="project-tag">Docker</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hologram">
+          <div class="project-inner">
+            <div class="project-front">
+              <div class="project-placeholder">iHELP</div>
+              <div class="project-content">
+                <h3>iHELP Logistics Platform</h3>
+                <p>Cloud-based emergency logistics platform with microservices.</p>
+                <div class="project-metrics">Response Time: 200ms</div>
+                <div class="project-links">
+                  <a href="#">Docs</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-back">
+              <div class="project-tags">
+                <span class="project-tag">PHP</span>
+                <span class="project-tag">React</span>
+                <span class="project-tag">AWS EC2</span>
+                <span class="project-tag">MySQL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hologram">
+          <div class="project-inner">
+            <div class="project-front">
+              <div class="project-placeholder">HealthAI</div>
+              <div class="project-content">
+                <h3>HealthAI Analytics</h3>
+                <p>AI-driven analytics for patient data using AWS SageMaker.</p>
+                <div class="project-metrics">Accuracy: 95%</div>
+                <div class="project-links">
+                  <a href="#">Whitepaper</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-back">
+              <div class="project-tags">
+                <span class="project-tag">Python</span>
+                <span class="project-tag">TensorFlow</span>
+                <span class="project-tag">AWS SageMaker</span>
+                <span class="project-tag">PostgreSQL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hologram">
+          <div class="project-inner">
+            <div class="project-front">
+              <div class="project-placeholder">SecureFlow</div>
+              <div class="project-content">
+                <h3>SecureFlow Pipeline</h3>
+                <p>Automated CI/CD pipeline for secure deployments.</p>
+                <div class="project-metrics">Deployments: 100+/month</div>
+                <div class="project-links">
+                  <a href="#">Repo</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-back">
+              <div class="project-tags">
+                <span class="project-tag">Jenkins</span>
+                <span class="project-tag">Terraform</span>
+                <span class="project-tag">Kubernetes</span>
+                <span class="project-tag">AWS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="project-hologram">
+          <div class="project-inner">
+            <div class="project-front">
+              <div class="project-placeholder">MediSync</div>
+              <div class="project-content">
+                <h3>MediSync Data Hub</h3>
+                <p>Real-time healthcare data synchronization with Azure.</p>
+                <div class="project-metrics">Latency: 150ms</div>
+                <div class="project-links">
+                  <a href="#">Demo</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-back">
+              <div class="project-tags">
+                <span class="project-tag">Node.js</span>
+                <span class="project-tag">Azure</span>
+                <span class="project-tag">GraphQL</span>
+                <span class="project-tag">MongoDB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="project-nav">
+        <button class="project-nav-btn" id="prevProject">←</button>
+        <button class="project-nav-btn" id="nextProject">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="section timeline" id="experience">
+    <div class="container">
+      <h2 class="section-title">Experience Pipeline</h2>
+      <div class="timeline-node">
+        <div class="timeline-content">
+          <span class="timeline-date">Feb 2022 - Present</span>
+          <h3>Senior Full-stack Developer / DevOps</h3>
+          <p>Vytalize Health, Amman, Jordan / New York, NY (Hybrid)</p>
+          <p>Led HIPAA-compliant solutions, CI/CD with AWS CodePipeline, and Salesforce integrations.</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-content">
+          <span class="timeline-date">Feb 2021 - Feb 2022</span>
+          <h3>Full-stack Developer</h3>
+          <p>Vytalize Health, Amman, Jordan / New York, NY (Hybrid)</p>
+          <p>Built healthcare data pipelines and optimized CCLF to FHIR conversions.</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-content">
+          <span class="timeline-date">Nov 2019 - Feb 2021</span>
+          <h3>Back End Developer</h3>
+          <p>PolaresLLC, Virginia, US (Remote)</p>
+          <p>Developed secure PHP applications adhering to NATO standards.</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-content">
+          <span class="timeline-date">Jun 2019 - Oct 2020</span>
+          <h3>Software Engineer</h3>
+          <p>Digital X Consulting, Amman, Jordan</p>
+          <p>Built ERPNext solutions with Python and Elasticsearch integrations.</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-content">
+          <span class="timeline-date">Apr 2018 - Jun 2019</span>
+          <h3>Freelance Software Developer</h3>
+          <p>Bitakonline, Amman, Jordan</p>
+          <p>Developed web applications using PHP, Laravel, and MySQL.</p>
+        </div>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-content">
+          <span class="timeline-date">May 2015 - Apr 2018</span>
+          <h3>Junior Developer</h3>
+          <p>TechStartup, Amman, Jordan</p>
+          <p>Contributed to early-stage web projects using Python and JavaScript.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education & Honors Section -->
+  <section class="section" id="education">
+    <div class="container">
+      <h2 class="section-title">Education & Achievements</h2>
+      <div class="log-grid">
+        <div class="log-node">
+          <h3>Education</h3>
+          <p>Bachelor's in Computer Information Systems<br>Yarmouk University, Jordan<br>2015 - 2018</p>
+        </div>
+        <div class="log-node">
+          <h3>Honors</h3>
+          <p>Guinness World Record<br>Largest Hackathon, Jeddah<br>August 2018</p>
+        </div>
+        <div class="log-node">
+          <h3>Publication</h3>
+          <p>IoT Smart Home Using Eye Tracking<br>URC2018, Zayed University<br>April 2018</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="contact-grid">
+        <div class="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="your.email@example.com">
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="5" placeholder="How can I help you?"></textarea>
+          </div>
+          <button class="submit-btn">Send Signal</button>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <i>📧</i>
+            <a href="mailto:rashedoumar@gmail.com">rashedoumar@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <i>📞</i>
+            <span>+962-790676797</span>
+          </div>
+          <div class="contact-item">
+            <i>📍</i>
+            <span>Amman, Jordan</span>
+          </div>
+          <div class="contact-item">
+            <i>📍</i>
+            <span>123 Health St, New York, NY 10001</span>
+          </div>
+          <div class="contact-item">
+            <i>🔗</i>
+            <a href="https://www.linkedin.com/in/rashed-omar-b85239143/" class="linkedin-badge">LinkedIn</a>
+          </div>
+          <div class="contact-item">
+            <i>📄</i>
+            <a href="Rashed_Resume_2024.pdf" download>Download Resume</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="social-links">
+        <a href="https://github.com/rashedomar" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/rashed-omar" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://twitter.com/rashedomar" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      </div>
+      <p>Built with <span style="color: var(--neon-pink);">♥</span> by Rashed M Omar</p>
+    </div>
+  </footer>
+
+  <!-- Game Overlay -->
+  <div class="game-overlay" id="gameOverlay">
+    <div class="game-score">💻 Network Infiltration Score: <span id="gameScore">0</span></div>
+    <canvas class="game-canvas" id="gameCanvas" width="600" height="500"></canvas>
+    <div class="game-instructions">
+      Click on compromised nodes (colored) to expand your network access.<br>
+      Target nodes are highlighted with an orange border.
+    </div>
+    <div class="game-leaderboard">
+      Top Hackers:<br>
+      <span id="gameLeaderboard">1. Rashed: 0</span>
+    </div>
+    <button class="game-close" id="gameClose">Exit Terminal</button>
+  </div>
+
+  <!-- Particles.js script -->
+  <script src="js/particles2.min.js"></script>
+  <script>
+    // Use particles.js v2.0.0 (alternative version)
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        // Give the DOM time to fully render
+        setTimeout(() => {
+          particlesJS('particles-bg', {
+            "particles": {
+              "number": {
+                "value": 50,
+                "density": {
+                  "enable": true,
+                  "value_area": 800
+                }
+              },
+              "color": {
+                "value": ["#64ffda", "#ff2e63", "#7b2cbf"]
+              },
+              "shape": {
+                "type": "circle",
+                "stroke": {
+                  "width": 0,
+                  "color": "#000000"
+                }
+              },
+              "opacity": {
+                "value": 0.3,
+                "random": true,
+                "anim": {
+                  "enable": true,
+                  "speed": 0.5,
+                  "opacity_min": 0.1,
+                  "sync": false
+                }
+              },
+              "size": {
+                "value": 3,
+                "random": true,
+                "anim": {
+                  "enable": true,
+                  "speed": 1,
+                  "size_min": 0.1,
+                  "sync": false
+                }
+              },
+              "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#64ffda",
+                "opacity": 0.2,
+                "width": 1
+              },
+              "move": {
+                "enable": true,
+                "speed": 1,
+                "direction": "none",
+                "random": true,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                  "enable": true,
+                  "rotateX": 600,
+                  "rotateY": 1200
+                }
+              }
+            },
+            "interactivity": {
+              "detect_on": "canvas",
+              "events": {
+                "onhover": {
+                  "enable": true,
+                  "mode": "grab"
+                },
+                "onclick": {
+                  "enable": true,
+                  "mode": "push"
+                },
+                "resize": true
+              },
+              "modes": {
+                "grab": {
+                  "distance": 140,
+                  "line_linked": {
+                    "opacity": 0.6
+                  }
+                },
+                "push": {
+                  "particles_nb": 3
+                }
+              }
+            },
+            "retina_detect": true
+          });
+          console.log('Particles.js initialized successfully');
+        }, 1000);
+      } catch (e) {
+        console.error('Failed to initialize particles:', e);
+      }
+    });
+  </script>
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script>window.gsap || document.write('<script src="js/gsap.min.js"><\/script>');</script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script>window.ScrollTrigger || document.write('<script src="js/ScrollTrigger.min.js"><\/script>');</script>
+  
+  <script src="https://unpkg.com/three@0.133.0/build/three.min.js"></script>
+  <script>window.THREE || document.write('<script src="js/three.min.js"><\/script>');</script>
+  
+  <!-- Custom Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/game.js"></script>
+</body>
+
+</html>
