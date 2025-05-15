@@ -39,7 +39,7 @@ try {
     'laravel deploy', 'npm run', 'ls', 'whoami', 'sudo npm install',
     'hack nasa', 'hack google', 'hack portfolio', 'ssh user@example.com',
     'ping google.com', 'neofetch', 'uname -a', 'rm -rf /',
-    'joke', 'exit'
+    'joke', 'ai chat', 'ai generate', 'ai predict', 'exit'
   ];
   
   // Auto-complete function
@@ -133,6 +133,10 @@ try {
         <span style="color: var(--text-secondary);">contact</span> - Contact information
         <span style="color: var(--text-secondary);">game</span> - Play Network Infiltration game
         <span style="color: var(--text-secondary);">clear</span> - Clear terminal
+        <span style="color: var(--accent);">AI commands:</span>
+        <span style="color: var(--text-secondary);">ai chat [prompt]</span> - Chat with the AI assistant
+        <span style="color: var(--text-secondary);">ai generate [prompt]</span> - Generate code samples
+        <span style="color: var(--text-secondary);">ai predict [domain]</span> - Get AI predictions
         <span style="color: var(--accent);">Advanced commands:</span>
         <span style="color: var(--text-secondary);">git log</span> - Show recent git activity
         <span style="color: var(--text-secondary);">aws status</span> - Check AWS services status
@@ -782,114 +786,255 @@ try {
         <span style="color: var(--accent);">Developer Joke:</span>
         <span style="color: var(--text-secondary);">${jokes[Math.floor(Math.random() * jokes.length)]}</span>
       `;
+    },
+    ai: (args) => {
+      if (args.length === 0) {
+        return `
+          <span style="color: var(--neon-pink);">Usage: ai [command] [prompt]</span>
+          <span style="color: var(--text-secondary);">Commands: chat, generate, predict</span>
+          <span style="color: var(--text-secondary);">Example: ai chat Tell me about quantum computing</span>
+        `;
+      }
+      
+      const subCommand = args[0];
+      const prompt = args.slice(1).join(' ');
+      
+      if (!prompt) {
+        return `
+          <span style="color: var(--neon-pink);">Please provide a prompt.</span>
+          <span style="color: var(--text-secondary);">Example: ai ${subCommand} Tell me about quantum computing</span>
+        `;
+      }
+      
+      let aiOutput = `<span style="color: var(--accent);">AI Assistant (${subCommand}):</span><br>`;
+      aiOutput += `<span style="color: var(--text-secondary);">Query: "${prompt}"</span><br>`;
+      
+      // Show typing animation
+      const typingAnimation = `
+        <div class="ai-typing">
+          <div class="ai-typing-dot"></div>
+          <div class="ai-typing-dot"></div>
+          <div class="ai-typing-dot"></div>
+        </div>
+      `;
+      
+      terminalOutput.innerHTML += `<div>${aiOutput}${typingAnimation}</div>`;
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      
+      // Simulate AI thinking
+      setTimeout(() => {
+        // Remove typing animation
+        const lastOutput = terminalOutput.lastElementChild;
+        if (lastOutput) {
+          lastOutput.innerHTML = aiOutput;
+        }
+        
+        let response = '';
+        
+        if (subCommand === 'chat') {
+          // Simulated AI chat responses based on keywords in the prompt
+          if (prompt.match(/quantum|physics|computer|computing/i)) {
+            response = "Quantum computing leverages quantum mechanics to process information in ways classical computers cannot. Unlike traditional bits, quantum bits (qubits) can exist in multiple states simultaneously through superposition, enabling parallel computation at scale. Current quantum systems are still experimental but show promise for cryptography, optimization problems, and simulating quantum systems.";
+          } else if (prompt.match(/machine learning|ml|ai|artificial intelligence|deep learning/i)) {
+            response = "Machine learning is a subset of AI that enables systems to learn from data without explicit programming. Deep learning, a specialized form that uses neural networks with many layers, has revolutionized fields like computer vision and natural language processing. The field continues to evolve with techniques like transformers, reinforcement learning, and generative models creating increasingly capable AI systems.";
+          } else if (prompt.match(/web|development|code|programming|software/i)) {
+            response = "Modern web development encompasses a vast ecosystem of frameworks, languages, and tools. Front-end technologies like React, Vue, and Angular enable dynamic user interfaces, while back-end systems might use Node.js, Python, or Go. Full-stack developers work across both domains, often implementing DevOps practices and cloud services for deployment. Web Assembly, Progressive Web Apps, and serverless architectures represent cutting-edge innovations in the field.";
+          } else {
+            response = "I'm a simulated AI assistant on this portfolio site. While I can provide information on various topics like technology, science, and programming, I don't have real-time capabilities or access to external data. This is a demonstration of how AI interfaces might work in web applications. For comprehensive AI assistance, consider tools like ChatGPT, Claude, or other dedicated AI platforms.";
+          }
+        } else if (subCommand === 'generate') {
+          // Simulated code generation
+          if (prompt.match(/react|component|jsx/i)) {
+            response = `<pre style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; overflow-x: auto;">import React, { useState, useEffect } from 'react';
+
+const AIComponent = ({ prompt, temperature = 0.7 }) => {
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    const generateResponse = async () => {
+      if (!prompt) return;
+      
+      setLoading(true);
+      try {
+        // In a real component, this would call an AI API
+        const result = await fetchAIResponse(prompt, temperature);
+        setResponse(result);
+      } catch (error) {
+        console.error('AI generation failed:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    generateResponse();
+  }, [prompt, temperature]);
+  
+  return (
+    <div className="ai-response-container">
+      {loading ? (
+        <div className="loading-indicator">Generating response...</div>
+      ) : (
+        <div className="response">{response}</div>
+      )}
+    </div>
+  );
+};
+
+export default AIComponent;</pre>`;
+          } else if (prompt.match(/python|machine learning|ml|algorithm/i)) {
+            response = `<pre style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; overflow-x: auto;">import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+def train_ai_model(data, labels, test_size=0.2, random_state=42):
+    """
+    Train a machine learning model on the provided data.
+    
+    Args:
+        data: Features for training
+        labels: Target values
+        test_size: Proportion of data to use for testing
+        random_state: Random seed for reproducibility
+    
+    Returns:
+        Trained model and performance metrics
+    """
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(
+        data, labels, test_size=test_size, random_state=random_state
+    )
+    
+    # Initialize and train model
+    model = RandomForestClassifier(n_estimators=100, random_state=random_state)
+    model.fit(X_train, y_train)
+    
+    # Evaluate model
+    predictions = model.predict(X_test)
+    accuracy = accuracy_score(y_test, predictions)
+    report = classification_report(y_test, predictions)
+    
+    return {
+        'model': model,
+        'accuracy': accuracy,
+        'report': report,
+        'feature_importance': model.feature_importances_
     }
+
+# Example usage
+if __name__ == "__main__":
+    # Generate synthetic data
+    X = np.random.randn(1000, 10)
+    y = (X[:, 0] + X[:, 1] > 0).astype(int)
+    
+    results = train_ai_model(X, y)
+    print(f"Model accuracy: {results['accuracy']:.2f}")
+    print(f"\\nClassification report:\\n{results['report']}")</pre>`;
+          } else {
+            response = "I can generate sample code snippets based on prompts. Try specifying a programming language or framework like \"generate a React component for user authentication\" or \"generate a Python script for data analysis\".";
+          }
+        } else if (subCommand === 'predict') {
+          // Simulated predictions
+          if (prompt.match(/stock|market|price|trend|investment/i)) {
+            const stockNames = ['AAPL', 'GOOGL', 'AMZN', 'MSFT', 'META'];
+            const randomStock = stockNames[Math.floor(Math.random() * stockNames.length)];
+            const currentValue = (Math.random() * 200 + 100).toFixed(2);
+            const prediction = (currentValue * (Math.random() * 0.2 + 0.9)).toFixed(2);
+            const sentiment = Math.random() > 0.5 ? 'Bullish' : 'Bearish';
+            const confidence = (Math.random() * 30 + 70).toFixed(1);
+            
+            response = `<div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 5px;">
+  <div style="font-weight: bold; color: var(--accent);">Market Prediction for ${randomStock}</div>
+  <div>Current Value: $${currentValue}</div>
+  <div>Predicted Value (30 days): $${prediction}</div>
+  <div>Sentiment: ${sentiment}</div>
+  <div>Confidence: ${confidence}%</div>
+  <div style="font-size: 0.8em; margin-top: 10px; color: var(--text-secondary);">
+    Note: This is a simulated prediction for demonstration purposes only. Never make investment decisions based on simulated data.
+  </div>
+</div>`;
+          } else if (prompt.match(/weather|temperature|forecast|rain|snow/i)) {
+            const cities = ['New York', 'London', 'Tokyo', 'Sydney', 'Paris', 'Berlin'];
+            const randomCity = cities[Math.floor(Math.random() * cities.length)];
+            const currentTemp = Math.floor(Math.random() * 30 + 5);
+            const conditions = ['Sunny', 'Cloudy', 'Rainy', 'Partly Cloudy', 'Thunderstorms', 'Snowy', 'Foggy'];
+            const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+            
+            response = `<div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 5px;">
+  <div style="font-weight: bold; color: var(--accent);">Weather Forecast for ${randomCity}</div>
+  <div>Current Temperature: ${currentTemp}°C</div>
+  <div>Conditions: ${randomCondition}</div>
+  <div>Humidity: ${Math.floor(Math.random() * 50 + 30)}%</div>
+  <div>Wind: ${Math.floor(Math.random() * 20 + 5)} km/h</div>
+  <div style="font-size: 0.8em; margin-top: 10px; color: var(--text-secondary);">
+    Note: This is a simulated forecast for demonstration purposes only.
+  </div>
+</div>`;
+          } else {
+            response = "I can make predictions in various domains like weather forecasts, market trends, or traffic patterns. Try asking something like \"predict stock market trends\" or \"predict weather for tomorrow\".";
+          }
+        } else {
+          response = "Unknown AI command. Available commands: chat, generate, predict";
+        }
+        
+        // Add response with typing effect
+        let i = 0;
+        const typeResponse = () => {
+          if (i < response.length) {
+            const lastOutput = terminalOutput.lastElementChild;
+            if (lastOutput) {
+              lastOutput.innerHTML = aiOutput + response.substring(0, i + 1);
+              terminalOutput.scrollTop = terminalOutput.scrollHeight;
+              i++;
+              
+              // Type faster for longer responses
+              const typingSpeed = response.length > 500 ? 5 : 15;
+              setTimeout(typeResponse, typingSpeed);
+            }
+          }
+        };
+        
+        typeResponse();
+      }, 1500);
+      
+      return null; // Return null to prevent default output handling
+    },
   };
-  
-  // Process commands
-  function processCommand(cmd) {
-    cmd = cmd.trim().toLowerCase();
-    
-    if (cmd === '') return;
-    
-    // Add command to history
-    commandHistory.unshift(cmd);
-    if (commandHistory.length > 20) commandHistory.pop(); // Limit history size
-    historyIndex = -1;
-    
-    // Add command to output
-    terminalOutput.innerHTML += `<div><span style="color: var(--text-secondary);">$ ${cmd}</span></div>`;
-    
-    // Process command
-    const args = cmd.split(' ');
-    const mainCommand = args[0];
-    
-    if (commands[mainCommand]) {
-      const output = commands[mainCommand](args.slice(1));
-      if (output) {
-        terminalOutput.innerHTML += `<div>${output}</div>`;
-      }
-    } else if (mainCommand === 'rm' && args.length > 1) {
-      // Special case for rm -rf
-      const output = commands.rm(args.slice(1));
-      if (output) {
-        terminalOutput.innerHTML += `<div>${output}</div>`;
-      }
-    } else if (mainCommand === 'cd' || mainCommand === 'mkdir' || mainCommand === 'touch' || 
-               mainCommand === 'mv' || mainCommand === 'cp' || mainCommand === 'chmod') {
-      // Handle common Unix commands with a joke
-      terminalOutput.innerHTML += `
-        <div>
-          <span style="color: var(--neon-pink);">This is a portfolio website, not a real terminal.</span>
-          <span style="color: var(--text-secondary);">If you're trying to use real Unix commands, you might be taking this simulation too seriously! 😉</span>
-          <span style="color: var(--accent);">Try 'help' to see available demo commands.</span>
-        </div>`;
-    } else if (mainCommand.startsWith('apt') || mainCommand.startsWith('yum') || 
-              mainCommand.startsWith('brew') || mainCommand.startsWith('npm') ||
-              mainCommand.startsWith('pip')) {
-      // Package manager commands
-      terminalOutput.innerHTML += `
-        <div>
-          <span style="color: var(--neon-pink);">Package manager detected!</span>
-          <span style="color: var(--text-secondary);">This is a browser-based terminal simulation, not a real package manager.</span>
-          <span style="color: var(--text-secondary);">You can't install packages in a website... yet!</span>
-          <span style="color: var(--accent);">Try 'help' to see what you can actually do here.</span>
-        </div>`;
-    } else if (mainCommand === 'exit' || mainCommand === 'quit' || mainCommand === 'logout') {
-      // Exit commands
-      terminalOutput.innerHTML += `
-        <div>
-          <span style="color: var(--accent);">You can't exit a website terminal!</span>
-          <span style="color: var(--text-secondary);">Just close the browser tab like a normal person. 😄</span>
-          <span style="color: var(--neon-pink);">Fun fact: Developers spend an average of 30% of their day trying to exit Vim.</span>
-        </div>`;
+
+// Handle input with history
+terminalInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const cmd = terminalInput.value;
+    if (cmd.trim() !== '') {
+      commandHistory.unshift(cmd);
+      commandHistory.push(cmd);
+      historyIndex = commandHistory.length;
+    }
+    processCommand(cmd);
+    terminalInput.value = '';
+  } else if (e.key === 'ArrowUp') {
+    if (historyIndex > 0) {
+      historyIndex--;
+      terminalInput.value = commandHistory[historyIndex];
+      // Move cursor to end
+      setTimeout(() => {
+        terminalInput.selectionStart = terminalInput.selectionEnd = terminalInput.value.length;
+      }, 0);
+    }
+    e.preventDefault();
+  } else if (e.key === 'ArrowDown') {
+    if (historyIndex < commandHistory.length - 1) {
+      historyIndex++;
+      terminalInput.value = commandHistory[historyIndex];
     } else {
-      // Command not found
-      terminalOutput.innerHTML += `
-        <div>
-          <span style="color: var(--neon-pink);">Command not found: ${cmd}</span>
-          <span style="color: var(--text-secondary);">This is a portfolio website with simulated terminal functionality.</span>
-          <span style="color: var(--text-secondary);">Type 'help' to see available commands.</span>
-          <span style="color: var(--accent);">Trying to hack? Try the 'hack' command instead!</span>
-        </div>`;
-    }
-    
-    // Scroll to bottom
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-  }
-  
-  // Handle input with history
-  terminalInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const cmd = terminalInput.value;
-      if (cmd.trim() !== '') {
-        commandHistory.unshift(cmd);
-        commandHistory.push(cmd);
-        historyIndex = commandHistory.length;
-      }
-      processCommand(cmd);
+      historyIndex = commandHistory.length;
       terminalInput.value = '';
-    } else if (e.key === 'ArrowUp') {
-      if (historyIndex > 0) {
-        historyIndex--;
-        terminalInput.value = commandHistory[historyIndex];
-        // Move cursor to end
-        setTimeout(() => {
-          terminalInput.selectionStart = terminalInput.selectionEnd = terminalInput.value.length;
-        }, 0);
-      }
-      e.preventDefault();
-    } else if (e.key === 'ArrowDown') {
-      if (historyIndex < commandHistory.length - 1) {
-        historyIndex++;
-        terminalInput.value = commandHistory[historyIndex];
-      } else {
-        historyIndex = commandHistory.length;
-        terminalInput.value = '';
-      }
-      e.preventDefault();
     }
-  });
-  
+    e.preventDefault();
+  }
+});
+
 } catch (e) {
   showError('Terminal functionality failed: ' + e.message);
 }
@@ -1009,4 +1154,160 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-}); 
+});
+
+// Process commands
+function processCommand(cmd) {
+  cmd = cmd.trim().toLowerCase();
+  
+  if (cmd === '') return;
+  
+  // Add command to history
+  commandHistory.unshift(cmd);
+  if (commandHistory.length > 20) commandHistory.pop(); // Limit history size
+  historyIndex = -1;
+  
+  // Add command to output
+  terminalOutput.innerHTML += `<div><span style="color: var(--text-secondary);">$ ${cmd}</span></div>`;
+  
+  // Process command
+  const args = cmd.split(' ');
+  const mainCommand = args[0];
+  
+  // Show matrix effect for AI-related commands
+  if (mainCommand === 'ai') {
+    showMatrixEffect(true);
+    
+    // Hide matrix effect after a delay
+    setTimeout(() => {
+      showMatrixEffect(false);
+    }, 5000);
+  }
+  
+  if (commands[mainCommand]) {
+    const output = commands[mainCommand](args.slice(1));
+    if (output) {
+      terminalOutput.innerHTML += `<div>${output}</div>`;
+    }
+  } else if (mainCommand === 'rm' && args.length > 1) {
+    // Special case for rm -rf
+    const output = commands.rm(args.slice(1));
+    if (output) {
+      terminalOutput.innerHTML += `<div>${output}</div>`;
+    }
+  } else if (mainCommand === 'cd' || mainCommand === 'mkdir' || mainCommand === 'touch' || 
+             mainCommand === 'mv' || mainCommand === 'cp' || mainCommand === 'chmod') {
+    // Handle common Unix commands with a joke
+    terminalOutput.innerHTML += `
+      <div>
+        <span style="color: var(--neon-pink);">This is a portfolio website, not a real terminal.</span>
+        <span style="color: var(--text-secondary);">If you're trying to use real Unix commands, you might be taking this simulation too seriously! 😉</span>
+        <span style="color: var(--accent);">Try 'help' to see available demo commands.</span>
+      </div>`;
+  } else if (mainCommand.startsWith('apt') || mainCommand.startsWith('yum') || 
+            mainCommand.startsWith('brew') || mainCommand.startsWith('npm') ||
+            mainCommand.startsWith('pip')) {
+    // Package manager commands
+    terminalOutput.innerHTML += `
+      <div>
+        <span style="color: var(--neon-pink);">Package manager detected!</span>
+        <span style="color: var(--text-secondary);">This is a browser-based terminal simulation, not a real package manager.</span>
+        <span style="color: var(--text-secondary);">You can't install packages in a website... yet!</span>
+        <span style="color: var(--accent);">Try 'help' to see what you can actually do here.</span>
+      </div>`;
+  } else if (mainCommand === 'exit' || mainCommand === 'quit' || mainCommand === 'logout') {
+    // Exit commands
+    terminalOutput.innerHTML += `
+      <div>
+        <span style="color: var(--accent);">You can't exit a website terminal!</span>
+        <span style="color: var(--text-secondary);">Just close the browser tab like a normal person. 😄</span>
+        <span style="color: var(--neon-pink);">Fun fact: Developers spend an average of 30% of their day trying to exit Vim.</span>
+      </div>`;
+  } else {
+    // Command not found
+    terminalOutput.innerHTML += `
+      <div>
+        <span style="color: var(--neon-pink);">Command not found: ${cmd}</span>
+        <span style="color: var(--text-secondary);">This is a portfolio website with simulated terminal functionality.</span>
+        <span style="color: var(--text-secondary);">Type 'help' to see available commands.</span>
+        <span style="color: var(--accent);">Trying to hack? Try the 'hack' command instead!</span>
+      </div>`;
+  }
+  
+  // Scroll to bottom
+  terminalOutput.scrollTop = terminalOutput.scrollHeight;
+}
+
+// Matrix Rain Effect
+function showMatrixEffect(show) {
+  const matrixRain = document.getElementById('matrixRain');
+  if (!matrixRain) return;
+  
+  if (show) {
+    matrixRain.classList.add('active');
+    
+    // Create canvas for matrix effect if it doesn't exist
+    if (!matrixRain.querySelector('canvas')) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.position = 'absolute';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      
+      matrixRain.appendChild(canvas);
+      
+      // Get theme colors
+      const isLightMode = document.body.classList.contains('light');
+      const matrixColor = isLightMode ? '#0066cc' : '#64ffda';
+      
+      // Matrix characters
+      const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
+      
+      // Setup columns
+      const fontSize = 14;
+      const columns = Math.floor(canvas.width / fontSize);
+      const drops = [];
+      
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * -100); // Start above the canvas
+      }
+      
+      // Drawing function
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = matrixColor;
+        ctx.font = `${fontSize}px monospace`;
+        
+        for (let i = 0; i < drops.length; i++) {
+          // Random character
+          const char = chars[Math.floor(Math.random() * chars.length)];
+          
+          // Draw the character
+          ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+          
+          // Move the raindrop down
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          
+          drops[i]++;
+        }
+        
+        // Only continue animation if the effect is active
+        if (matrixRain.classList.contains('active')) {
+          requestAnimationFrame(draw);
+        }
+      }
+      
+      // Start animation
+      draw();
+    }
+  } else {
+    matrixRain.classList.remove('active');
+  }
+} 
