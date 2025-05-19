@@ -21,6 +21,7 @@
     box-sizing: border-box;
     font-family: 'IBM Plex Mono', monospace;
     cursor: none;
+    max-width: 100%;
   }
   
   body {
@@ -30,6 +31,8 @@
     overflow-x: hidden;
     transition: background-color 0.5s, color 0.5s;
     background: linear-gradient(135deg, var(--primary), #0f2847);
+    width: 100%;
+    position: relative;
   }
   
   body.light {
@@ -221,6 +224,7 @@
     transition: transform 0.5s, box-shadow 0.5s;
     max-width: 900px;
     position: relative;
+    width: 95%;
   }
   
   body.light .terminal-node {
@@ -531,40 +535,127 @@
     .nav-links {
       display: none;
       flex-direction: column;
-      position: absolute;
+      position: fixed;
       top: 60px;
       left: 0;
       width: 100%;
       background: var(--secondary);
       padding: 20px;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .nav-links.active {
       display: flex;
     }
 
+    .nav-links li {
+      margin: 10px 0;
+    }
+
     .hamburger {
       display: block;
       cursor: pointer !important;
+      z-index: 1001;
     }
 
+    /* Terminal Adjustments */
     .terminal-node {
       transform: none;
-      margin: 20px;
+      margin: 15px auto;
+      width: 95%;
+      max-height: 80vh;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .terminal-output {
+      font-size: 0.9rem;
+      max-height: 50vh;
+      padding: 8px;
+      line-height: 1.4;
+    }
+
+    .terminal-input {
+      padding: 8px;
+      margin-top: 8px;
     }
 
     .terminal-input input {
-      font-size: 1.2rem;
+      font-size: 0.9rem;
+      padding: 4px;
     }
 
+    .node-body {
+      padding: 12px;
+      min-height: 200px;
+    }
+
+    /* Project Timeline Adjustments */
+    .project-timeline {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .project-hologram {
+      min-width: 280px;
+      max-width: 100%;
+      height: 350px;
+      margin: 0 auto;
+    }
+
+    .project-content {
+      padding: 12px;
+    }
+
+    .project-content h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .project-content p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    /* Skills Section Adjustments */
+    .skill-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 10px;
+    }
+
+    .skill-cube {
+      width: 100%;
+      height: 120px;
+      font-size: 0.9rem;
+    }
+
+    /* Contact Form Adjustments */
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .contact-form {
+      padding: 15px;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      font-size: 0.9rem;
+      padding: 8px;
+    }
+
+    /* Timeline Adjustments */
     .timeline::before {
-      left: 30px;
+      left: 20px;
     }
 
     .timeline-node {
       width: 100%;
-      padding-left: 70px;
-      padding-right: 20px;
+      padding-left: 50px;
+      padding-right: 15px;
+      margin-bottom: 20px;
     }
 
     .timeline-node:nth-child(odd),
@@ -573,62 +664,95 @@
       text-align: left;
     }
 
-    .timeline-node:nth-child(odd)::after,
-    .timeline-node:nth-child(even)::after {
-      left: 20px;
+    .timeline-node::after {
+      left: 12px;
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Section Title Adjustments */
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
     }
 
     .section-title::after {
-      width: 100%;
+      width: 60px;
+      height: 3px;
     }
 
-    #skills-canvas {
-      height: 300px;
-    }
-
-    .project-timeline {
-      flex-direction: column;
-      flex-wrap: nowrap;
-    }
-
-    .project-hologram {
-      min-width: 280px;
-      max-width: 100%;
-      height: 400px;
-    }
-
-    .project-content {
+    /* Game Overlay Adjustments */
+    .game-overlay {
       padding: 15px;
-    }
-    
-    .project-content h3 {
-      font-size: 1.1rem;
     }
 
     .game-canvas {
       width: 100%;
       max-height: 60vh;
     }
-    
-    .game-overlay {
-      padding-bottom: 80px;
-    }
 
     .game-score {
       font-size: 1.2rem;
-      margin-top: 60px; /* Space for top exit button */
+      margin-top: 60px;
     }
-    
+
     .game-instructions,
     .game-leaderboard {
       width: 90%;
       max-width: 100%;
       font-size: 0.85rem;
       padding: 8px 12px;
+      margin: 10px auto;
     }
-    
+
     .game-leaderboard {
-      margin-bottom: 80px; /* More space for fixed button on mobile */
+      margin-bottom: 80px;
+    }
+
+    /* Footer Adjustments */
+    footer {
+      padding: 20px 15px;
+    }
+
+    .social-links {
+      gap: 15px;
+    }
+
+    .social-links a {
+      font-size: 1.2rem;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  }
+
+  /* Additional Small Screen Adjustments */
+  @media (max-width: 480px) {
+    .terminal-node {
+      margin: 10px auto;
+      width: 98%;
+    }
+
+    .skill-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-hologram {
+      height: 300px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+    }
+
+    .terminal-output {
+      font-size: 0.85rem;
+    }
+
+    .terminal-input input {
+      font-size: 0.85rem;
     }
   }
 
@@ -713,6 +837,7 @@
     padding: 5px;
     border-radius: 5px;
     background: rgba(0, 0, 0, 0.2);
+    word-break: break-word;
   }
 
   body.light .terminal-output {
@@ -767,44 +892,74 @@
     color: var(--neon-purple);
   }
 
-  .terminal-suggestions {
-    display: none;
+  #terminal-suggestions {
     position: absolute;
     bottom: 100%;
     left: 0;
-    width: 100%;
-    max-height: 150px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #00ff00;
+    border-radius: 4px;
+    max-height: 200px;
     overflow-y: auto;
-    background: rgba(23, 42, 69, 0.9);
-    border-top: 1px solid var(--accent);
-    z-index: 100;
-    font-size: 0.9rem;
-    padding: 5px 0;
-    backdrop-filter: blur(8px);
-    border-radius: 5px 5px 0 0;
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
   }
 
-  body.light .terminal-suggestions {
-    background: rgba(230, 232, 239, 0.9);
-    border-top: 1px solid var(--light-accent);
-    color: var(--light-text);
+  #terminal-suggestions::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #terminal-suggestions::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  #terminal-suggestions::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 0, 0.3);
+    border-radius: 4px;
+  }
+
+  #terminal-suggestions::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 0, 0.5);
   }
 
   .suggestion {
-    padding: 5px 10px;
+    padding: 8px 12px;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.1);
   }
 
-  .suggestion:hover {
-    background-color: rgba(100, 255, 218, 0.2);
-    color: var(--accent);
+  .suggestion:last-child {
+    border-bottom: none;
   }
 
-  body.light .suggestion:hover {
-    background-color: rgba(61, 90, 254, 0.1);
-    color: var(--light-accent);
+  .suggestion:hover,
+  .suggestion.selected {
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .suggestion .match {
+    color: #fff;
+    font-weight: bold;
+    background: rgba(0, 255, 0, 0.2);
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 768px) {
+    #terminal-suggestions {
+      max-height: 150px;
+      font-size: 0.9em;
+    }
+    
+    .suggestion {
+      padding: 6px 10px;
+    }
   }
 
   /* Hero Section */
@@ -854,19 +1009,6 @@
     box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
   }
 
-  .section-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.2rem;
-    color: var(--accent);
-    margin-bottom: 20px;
-    position: relative;
-    animation: neon-pulse 2s infinite;
-  }
-
-  body.light .section-title {
-    color: var(--light-accent);
-  }
-
   .section-title::after {
     content: '';
     position: absolute;
@@ -881,6 +1023,7 @@
   .timeline {
     position: relative;
     padding: 40px 0;
+    width: 100%;
   }
 
   .timeline::before {
@@ -958,6 +1101,94 @@
   .timeline-content p {
     color: var(--text-secondary);
     font-size: 0.9rem;
+  }
+
+  /* Mobile Experience View */
+  @media screen and (max-width: 768px) {
+    .timeline {
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .timeline::before {
+      display: none;
+    }
+
+    .timeline-node {
+      width: 100%;
+      padding: 0;
+      margin-bottom: 20px;
+      text-align: left;
+      left: 0;
+    }
+
+    .timeline-node::after {
+      display: none;
+    }
+
+    .timeline-content {
+      position: relative;
+      padding: 15px;
+      margin: 0;
+      border-left: 3px solid var(--accent);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--secondary);
+      width: 100%;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .timeline-content:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .timeline-date {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--primary);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .timeline-content h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--neon-purple);
+      word-wrap: break-word;
+      padding-right: 5px;
+    }
+
+    .timeline-content p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--text-secondary);
+      word-wrap: break-word;
+      padding-right: 5px;
+    }
+  }
+
+  /* Additional Small Screen Adjustments */
+  @media screen and (max-width: 480px) {
+    .timeline-content {
+      padding: 12px;
+    }
+
+    .timeline-date {
+      font-size: 0.75rem;
+    }
+
+    .timeline-content h3 {
+      font-size: 1rem;
+    }
+
+    .timeline-content p {
+      font-size: 0.85rem;
+    }
   }
 
   /* Education & Logs */

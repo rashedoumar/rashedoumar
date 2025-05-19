@@ -19,7 +19,7 @@ try {
   
   // Welcome message with smaller ASCII art
   const welcomeMessage = `
-  <span style="color: var(--accent); font-size: 0.8em;">
+  <span style="color: var(--accent); font-size: 0.6em;">
   ██████╗  █████╗ ███████╗██╗  ██╗███████╗██████╗ 
   ██╔══██╗██╔══██╗██╔════╝██║  ██║██╔════╝██╔══██╗
   ██████╔╝███████║███████╗███████║█████╗  ██║  ██║
@@ -28,10 +28,10 @@ try {
   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝ 
   </span>
   
-  <span style="color: var(--neon-pink);">Welcome to Rashed Omar's Portfolio Terminal v2.0</span>
+  <span style="color: var(--neon-pink); font-size: 0.9em;">Welcome to Rashed Omar's Portfolio Terminal v2.0</span>
   
-  <span style="color: var(--text-secondary);">Type 'help' to see available commands</span>
-  <span style="color: var(--text-secondary);">Last login: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</span>
+  <span style="color: var(--text-secondary); font-size: 0.85em;">Type 'help' to see available commands</span>
+  <span style="color: var(--text-secondary); font-size: 0.85em;">Last login: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</span>
   `;
   
   terminalOutput.innerHTML = welcomeMessage;
@@ -65,8 +65,9 @@ try {
   // Auto-complete function
   function autoCompleteCommand(input) {
     if (!input) return [];
+    const normalizedInput = input.toLowerCase();
     return availableCommands.filter(cmd => 
-      cmd.toLowerCase().startsWith(input.toLowerCase())
+      cmd.toLowerCase().startsWith(normalizedInput)
     );
   }
   
@@ -77,7 +78,15 @@ try {
     
     if (suggestions.length > 0 && input.length > 0) {
       terminalSuggestions.innerHTML = suggestions
-        .map(s => `<div class="suggestion">${s}</div>`)
+        .map(s => {
+          const matchIndex = s.toLowerCase().indexOf(input.toLowerCase());
+          const beforeMatch = s.slice(0, matchIndex);
+          const match = s.slice(matchIndex, matchIndex + input.length);
+          const afterMatch = s.slice(matchIndex + input.length);
+          return `<div class="suggestion" data-command="${s}">
+            ${beforeMatch}<span class="match">${match}</span>${afterMatch}
+          </div>`;
+        })
         .join('');
       terminalSuggestions.style.display = 'block';
     } else {
@@ -87,8 +96,9 @@ try {
   
   // Handle suggestion clicks
   terminalSuggestions.addEventListener('click', function(e) {
-    if (e.target.classList.contains('suggestion')) {
-      terminalInput.value = e.target.textContent;
+    const suggestion = e.target.closest('.suggestion');
+    if (suggestion) {
+      terminalInput.value = suggestion.dataset.command;
       terminalSuggestions.style.display = 'none';
       terminalInput.focus();
     }
@@ -100,6 +110,44 @@ try {
     setTimeout(() => {
       terminalSuggestions.style.display = 'none';
     }, 200);
+  });
+  
+  // Add keyboard navigation for suggestions
+  let selectedSuggestionIndex = -1;
+  
+  terminalInput.addEventListener('keydown', function(e) {
+    const suggestions = Array.from(terminalSuggestions.children);
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (suggestions.length > 0) {
+        selectedSuggestionIndex = (selectedSuggestionIndex + 1) % suggestions.length;
+        suggestions.forEach((s, i) => {
+          s.classList.toggle('selected', i === selectedSuggestionIndex);
+        });
+        suggestions[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (suggestions.length > 0) {
+        selectedSuggestionIndex = (selectedSuggestionIndex - 1 + suggestions.length) % suggestions.length;
+        suggestions.forEach((s, i) => {
+          s.classList.toggle('selected', i === selectedSuggestionIndex);
+        });
+        suggestions[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
+      }
+    } else if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+      e.preventDefault();
+      const selectedSuggestion = suggestions[selectedSuggestionIndex];
+      if (selectedSuggestion) {
+        terminalInput.value = selectedSuggestion.dataset.command;
+        terminalSuggestions.style.display = 'none';
+        selectedSuggestionIndex = -1;
+      }
+    } else if (e.key === 'Escape') {
+      terminalSuggestions.style.display = 'none';
+      selectedSuggestionIndex = -1;
+    }
   });
   
   // Add animation helper functions at the top of the file
@@ -1408,12 +1456,100 @@ try {
       `;
     },
     virus: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      // Create virus particles
+      const particles = Array.from({ length: 20 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        size: Math.random() * 3 + 2
+      }));
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw network nodes
+        const nodes = [
+          { x: 50, y: 50, name: 'PC1' },
+          { x: 200, y: 50, name: 'PC2' },
+          { x: 350, y: 50, name: 'PC3' },
+          { x: 125, y: 150, name: 'Server' },
+          { x: 275, y: 150, name: 'Router' }
+        ];
+        
+        // Draw connections
+        ctx.strokeStyle = 'var(--accent)';
+        nodes.forEach((node, i) => {
+          nodes.slice(i + 1).forEach(target => {
+            ctx.beginPath();
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(target.x, target.y);
+            ctx.stroke();
+          });
+        });
+        
+        // Draw nodes
+        nodes.forEach(node => {
+          ctx.fillStyle = 'var(--accent)';
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 10, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = 'var(--text-secondary)';
+          ctx.fillText(node.name, node.x - 15, node.y + 25);
+        });
+        
+        // Update and draw particles
+        particles.forEach(particle => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          
+          // Bounce off edges
+          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+          
+          // Draw particle
+          ctx.fillStyle = 'var(--neon-pink)';
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        
+        // Draw infection status
+        const progress = Math.min(frame / 180, 1);
+        const infectedNodes = Math.floor(progress * nodes.length);
+        
+        ctx.fillStyle = 'var(--neon-pink)';
+        ctx.font = '12px monospace';
+        ctx.fillText(`Infected Nodes: ${infectedNodes}/${nodes.length}`, 10, 190);
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Virus Simulation Complete</span>
+              <span style="color: var(--text-secondary);">Network compromised</span>
+              <span style="color: var(--neon-pink);">All nodes infected</span>
+            </div>`;
+        }
+      };
+      
+      animate();
       return `
-        <span style="color: var(--accent);">VIRUS SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Analyzing viral structure...</span>
-        <span style="color: var(--text-secondary);">> Replicating genetic material...</span>
-        <span style="color: var(--text-secondary);">> Injecting payload...</span>
-        <span style="color: var(--neon-pink);">Virus simulation complete. System safe.</span>
+        <span style="color: var(--neon-pink);">VIRUS PROPAGATION SIMULATION</span>
+        <div id="virus-animation"></div>
       `;
     },
     worm: () => {
@@ -1444,30 +1580,258 @@ try {
       `;
     },
     ddos: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      // Create attack sources
+      const sources = Array.from({ length: 10 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        targetX: canvas.width / 2,
+        targetY: canvas.height / 2
+      }));
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw target server
+        ctx.fillStyle = 'var(--accent)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, 20, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'var(--text-secondary)';
+        ctx.fillText('Target Server', canvas.width / 2 - 40, canvas.height / 2 + 35);
+        
+        // Draw attack sources and connections
+        sources.forEach(source => {
+          // Draw source
+          ctx.fillStyle = 'var(--neon-pink)';
+          ctx.beginPath();
+          ctx.arc(source.x, source.y, 5, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Draw attack line
+          const progress = Math.min(frame / 60, 1);
+          const currentX = source.x + (source.targetX - source.x) * progress;
+          const currentY = source.y + (source.targetY - source.y) * progress;
+          
+          ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
+          ctx.beginPath();
+          ctx.moveTo(source.x, source.y);
+          ctx.lineTo(currentX, currentY);
+          ctx.stroke();
+        });
+        
+        // Draw server load
+        const load = Math.min(frame / 180, 1);
+        const loadBarWidth = 200;
+        const loadBarHeight = 20;
+        const loadBarX = (canvas.width - loadBarWidth) / 2;
+        const loadBarY = canvas.height - 40;
+        
+        // Background
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.fillRect(loadBarX, loadBarY, loadBarWidth, loadBarHeight);
+        
+        // Load level
+        ctx.fillStyle = `rgb(${255 * load}, ${255 * (1 - load)}, 0)`;
+        ctx.fillRect(loadBarX, loadBarY, loadBarWidth * load, loadBarHeight);
+        
+        // Load text
+        ctx.fillStyle = 'var(--text-secondary)';
+        ctx.fillText(`Server Load: ${Math.floor(load * 100)}%`, loadBarX, loadBarY - 5);
+        
+        if (load < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">DDoS Simulation Complete</span>
+              <span style="color: var(--text-secondary);">Server overloaded</span>
+              <span style="color: var(--neon-pink);">Service unavailable</span>
+            </div>`;
+        }
+      };
+      
+      animate();
       return `
-        <span style="color: var(--accent);">DDoS SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Coordinating botnet...</span>
-        <span style="color: var(--text-secondary);">> Amplifying traffic...</span>
-        <span style="color: var(--text-secondary);">> Overwhelming target...</span>
-        <span style="color: var(--neon-pink);">DDoS mitigated. Service restored.</span>
+        <span style="color: var(--neon-pink);">DDoS ATTACK SIMULATION</span>
+        <div id="ddos-animation"></div>
       `;
     },
     bruteforce: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      // Generate random password attempts
+      const generateAttempt = () => {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+        const length = Math.floor(Math.random() * 8) + 4;
+        return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+      };
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw lock
+        ctx.fillStyle = 'var(--accent)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, 80, 30, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw lock shackle
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2 - 15, 80);
+        ctx.lineTo(canvas.width / 2 + 15, 80);
+        ctx.stroke();
+        
+        // Draw password attempts
+        const attempts = Math.min(frame / 2, 10);
+        for (let i = 0; i < attempts; i++) {
+          const attempt = generateAttempt();
+          ctx.fillStyle = 'var(--text-secondary)';
+          ctx.font = '12px monospace';
+          ctx.fillText(attempt, 50, 150 + i * 20);
+        }
+        
+        // Draw progress
+        const progress = Math.min(frame / 180, 1);
+        const barWidth = 300;
+        const barHeight = 20;
+        const barX = (canvas.width - barWidth) / 2;
+        const barY = canvas.height - 40;
+        
+        // Background
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+        
+        // Progress
+        ctx.fillStyle = `rgb(${255 * progress}, ${255 * (1 - progress)}, 0)`;
+        ctx.fillRect(barX, barY, barWidth * progress, barHeight);
+        
+        // Progress text
+        ctx.fillStyle = 'var(--text-secondary)';
+        ctx.fillText(`Attempts: ${Math.floor(frame / 2)}`, barX, barY - 5);
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Bruteforce Simulation Complete</span>
+              <span style="color: var(--text-secondary);">Password cracked</span>
+              <span style="color: var(--neon-pink);">Access granted</span>
+            </div>`;
+        }
+      };
+      
+      animate();
       return `
-        <span style="color: var(--accent);">BRUTEFORCE SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Testing password combinations...</span>
-        <span style="color: var(--text-secondary);">> Attempting character sets...</span>
-        <span style="color: var(--text-secondary);">> Analyzing patterns...</span>
-        <span style="color: var(--neon-pink);">Bruteforce attempt blocked.</span>
+        <span style="color: var(--neon-pink);">BRUTEFORCE ATTACK SIMULATION</span>
+        <div id="bruteforce-animation"></div>
       `;
     },
     sniff: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      // Generate random packet data
+      const generatePacket = () => {
+        const types = ['HTTP', 'HTTPS', 'FTP', 'SSH', 'DNS'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        const size = Math.floor(Math.random() * 1000) + 100;
+        const source = `192.168.1.${Math.floor(Math.random() * 255)}`;
+        const dest = `10.0.0.${Math.floor(Math.random() * 255)}`;
+        return { type, size, source, dest };
+      };
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw network interface
+        ctx.fillStyle = 'var(--accent)';
+        ctx.fillRect(20, 20, canvas.width - 40, 40);
+        ctx.fillStyle = 'var(--text-secondary)';
+        ctx.fillText('Network Interface: eth0', 30, 45);
+        
+        // Draw packets
+        const packets = Math.min(frame / 2, 8);
+        for (let i = 0; i < packets; i++) {
+          const packet = generatePacket();
+          const y = 80 + i * 25;
+          
+          // Draw packet
+          ctx.fillStyle = 'var(--neon-pink)';
+          ctx.fillRect(30, y, 340, 20);
+          
+          // Draw packet info
+          ctx.fillStyle = 'var(--text-secondary)';
+          ctx.font = '10px monospace';
+          ctx.fillText(`${packet.type} | ${packet.source} → ${packet.dest} | ${packet.size} bytes`, 40, y + 15);
+        }
+        
+        // Draw capture status
+        const progress = Math.min(frame / 180, 1);
+        const barWidth = 300;
+        const barHeight = 20;
+        const barX = (canvas.width - barWidth) / 2;
+        const barY = canvas.height - 40;
+        
+        // Background
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+        
+        // Progress
+        ctx.fillStyle = `rgb(${255 * progress}, ${255 * (1 - progress)}, 0)`;
+        ctx.fillRect(barX, barY, barWidth * progress, barHeight);
+        
+        // Progress text
+        ctx.fillStyle = 'var(--text-secondary)';
+        ctx.fillText(`Captured Packets: ${Math.floor(frame / 2)}`, barX, barY - 5);
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Packet Sniffing Complete</span>
+              <span style="color: var(--text-secondary);">Network traffic analyzed</span>
+              <span style="color: var(--neon-pink);">Sensitive data detected</span>
+            </div>`;
+        }
+      };
+      
+      animate();
       return `
-        <span style="color: var(--accent);">PACKET SNIFFING SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Capturing network traffic...</span>
-        <span style="color: var(--text-secondary);">> Analyzing packets...</span>
-        <span style="color: var(--text-secondary);">> Extracting data...</span>
-        <span style="color: var(--neon-pink);">Sniffing attempt detected.</span>
+        <span style="color: var(--neon-pink);">PACKET SNIFFING SIMULATION</span>
+        <div id="sniff-animation"></div>
       `;
     },
     spoof: () => {
@@ -1480,30 +1844,166 @@ try {
       `;
     },
     mitm: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw network nodes
+        const nodes = [
+          { x: 50, y: 100, name: 'Client' },
+          { x: 200, y: 100, name: 'Attacker' },
+          { x: 350, y: 100, name: 'Server' }
+        ];
+        
+        // Draw nodes
+        nodes.forEach(node => {
+          ctx.fillStyle = 'var(--accent)';
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 15, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = 'var(--text-secondary)';
+          ctx.fillText(node.name, node.x - 20, node.y + 35);
+        });
+        
+        // Draw connections
+        ctx.strokeStyle = 'var(--accent)';
+        ctx.beginPath();
+        ctx.moveTo(nodes[0].x, nodes[0].y);
+        ctx.lineTo(nodes[1].x, nodes[1].y);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(nodes[1].x, nodes[1].y);
+        ctx.lineTo(nodes[2].x, nodes[2].y);
+        ctx.stroke();
+        
+        // Draw data packets
+        const progress = Math.min(frame / 180, 1);
+        const packetX = nodes[0].x + (nodes[2].x - nodes[0].x) * progress;
+        const packetY = nodes[0].y + (nodes[2].y - nodes[0].y) * progress;
+        
+        // Draw packet
+        ctx.fillStyle = 'var(--neon-pink)';
+        ctx.beginPath();
+        ctx.arc(packetX, packetY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw intercepted data
+        if (progress > 0.4 && progress < 0.6) {
+          ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+          ctx.fillRect(nodes[1].x - 30, nodes[1].y - 30, 60, 60);
+          
+          ctx.fillStyle = 'var(--neon-pink)';
+          ctx.font = '12px monospace';
+          ctx.fillText('INTERCEPTED', nodes[1].x - 30, nodes[1].y);
+        }
+        
+        // Draw status
+        const statuses = [
+          'Monitoring traffic...',
+          'Intercepting connection...',
+          'Decrypting data...',
+          'Modifying packets...',
+          'Forwarding to target...'
+        ];
+        
+        const statusIndex = Math.floor(progress * statuses.length);
+        ctx.fillStyle = 'var(--text-secondary)';
+        ctx.fillText(statuses[statusIndex], 10, 180);
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">MITM Attack Complete</span>
+              <span style="color: var(--text-secondary);">Connection intercepted</span>
+              <span style="color: var(--neon-pink);">Data compromised</span>
+            </div>`;
+        }
+      };
+      
+      animate();
       return `
-        <span style="color: var(--accent);">MAN-IN-THE-MIDDLE SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Intercepting communication...</span>
-        <span style="color: var(--text-secondary);">> Relaying messages...</span>
-        <span style="color: var(--text-secondary);">> Modifying traffic...</span>
-        <span style="color: var(--neon-pink);">MITM attack prevented.</span>
-      `;
-    },
-    keylogger: () => {
-      return `
-        <span style="color: var(--accent);">KEYLOGGER SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Monitoring keystrokes...</span>
-        <span style="color: var(--text-secondary);">> Capturing input...</span>
-        <span style="color: var(--text-secondary);">> Logging data...</span>
-        <span style="color: var(--neon-pink);">Keylogger detected and removed.</span>
+        <span style="color: var(--neon-pink);">MAN-IN-THE-MIDDLE ATTACK SIMULATION</span>
+        <div id="mitm-animation"></div>
       `;
     },
     ransomware: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw file system
+        const files = [
+          { x: 50, y: 50, name: 'documents' },
+          { x: 150, y: 50, name: 'photos' },
+          { x: 250, y: 50, name: 'videos' },
+          { x: 350, y: 50, name: 'backups' }
+        ];
+        
+        // Draw files
+        files.forEach(file => {
+          ctx.fillStyle = 'var(--accent)';
+          ctx.fillRect(file.x, file.y, 40, 40);
+          ctx.fillStyle = 'var(--text-secondary)';
+          ctx.fillText(file.name, file.x, file.y + 60);
+        });
+        
+        // Draw encryption effect
+        const progress = Math.min(frame / 180, 1);
+        const encryptY = 50 + progress * 100;
+        
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+        ctx.fillRect(0, encryptY - 10, canvas.width, 20);
+        
+        // Draw ransom note
+        if (progress > 0.8) {
+          ctx.fillStyle = 'var(--neon-pink)';
+          ctx.font = 'bold 16px monospace';
+          ctx.fillText('YOUR FILES HAVE BEEN ENCRYPTED', 50, 180);
+          ctx.font = '12px monospace';
+          ctx.fillText('Send 1 BTC to unlock', 50, 200);
+        }
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Ransomware Simulation Complete</span>
+              <span style="color: var(--text-secondary);">This is just a simulation!</span>
+              <span style="color: var(--neon-pink);">No actual files were harmed.</span>
+            </div>`;
+        }
+      };
+      
+      animate();
       return `
-        <span style="color: var(--accent);">RANSOMWARE SIMULATION</span>
-        <span style="color: var(--text-secondary);">> Encrypting files...</span>
-        <span style="color: var(--text-secondary);">> Generating ransom note...</span>
-        <span style="color: var(--text-secondary);">> Demanding payment...</span>
-        <span style="color: var(--neon-pink);">Ransomware blocked. Files safe.</span>
+        <span style="color: var(--neon-pink);">RANSOMWARE SIMULATION</span>
+        <div id="ransomware-animation"></div>
       `;
     },
     botnet: () => {
@@ -1740,6 +2240,209 @@ try {
       return `
         <span style="color: var(--neon-pink);">INITIATING SYSTEM DESTRUCTION...</span>
         <span style="color: var(--text-secondary);">Warning: This is just a visual effect!</span>
+      `;
+    },
+    encrypt: (args) => {
+      const text = args.join(' ') || 'No text provided';
+      const key = Math.random().toString(36).substring(7);
+      
+      // Create a canvas for the encryption animation
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 100;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'var(--accent)';
+        ctx.font = '12px monospace';
+        
+        // Draw encryption progress
+        const progress = Math.min(frame / 60, 1);
+        const barWidth = canvas.width * progress;
+        ctx.fillRect(0, 0, barWidth, 5);
+        
+        // Draw binary stream
+        for (let i = 0; i < 10; i++) {
+          const y = 20 + i * 8;
+          const x = (frame + i * 20) % canvas.width;
+          ctx.fillText(Math.random().toString(2).substring(2, 10), x, y);
+        }
+        
+        // Draw status
+        ctx.fillText(`Encrypting: ${Math.floor(progress * 100)}%`, 10, 90);
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          // Show encrypted result
+          const encrypted = btoa(text).split('').map(c => 
+            String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(0))
+          ).join('');
+          
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Encryption Complete</span>
+              <span style="color: var(--text-secondary);">Key: ${key}</span>
+              <span style="color: var(--neon-pink);">Encrypted: ${encrypted}</span>
+            </div>`;
+        }
+      };
+      
+      animate();
+      return `
+        <span style="color: var(--neon-pink);">ENCRYPTION IN PROGRESS</span>
+        <div id="encrypt-animation"></div>
+      `;
+    },
+    exploit: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'var(--accent)';
+        ctx.font = '12px monospace';
+        
+        // Draw network nodes
+        const nodes = [
+          { x: 50, y: 50, name: 'Target' },
+          { x: 200, y: 100, name: 'Router' },
+          { x: 350, y: 50, name: 'Database' }
+        ];
+        
+        // Draw connections
+        ctx.strokeStyle = 'var(--accent)';
+        ctx.beginPath();
+        ctx.moveTo(nodes[0].x, nodes[0].y);
+        ctx.lineTo(nodes[1].x, nodes[1].y);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(nodes[1].x, nodes[1].y);
+        ctx.lineTo(nodes[2].x, nodes[2].y);
+        ctx.stroke();
+        
+        // Draw attack vector
+        const progress = Math.min(frame / 120, 1);
+        const attackX = nodes[0].x + (nodes[2].x - nodes[0].x) * progress;
+        const attackY = nodes[0].y + (nodes[2].y - nodes[0].y) * progress;
+        
+        ctx.fillStyle = 'var(--neon-pink)';
+        ctx.beginPath();
+        ctx.arc(attackX, attackY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Draw status
+        const statuses = [
+          'Scanning ports...',
+          'Bypassing firewall...',
+          'Injecting payload...',
+          'Exploiting vulnerability...',
+          'Gaining access...'
+        ];
+        
+        const statusIndex = Math.floor(progress * statuses.length);
+        ctx.fillText(statuses[statusIndex], 10, 180);
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Exploit Complete</span>
+              <span style="color: var(--text-secondary);">Target system compromised</span>
+              <span style="color: var(--neon-pink);">Access level: ROOT</span>
+            </div>`;
+        }
+      };
+      
+      animate();
+      return `
+        <span style="color: var(--neon-pink);">EXPLOIT IN PROGRESS</span>
+        <div id="exploit-animation"></div>
+      `;
+    },
+    ransomware: () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 200;
+      canvas.style.background = 'rgba(0, 0, 0, 0.8)';
+      canvas.style.border = '1px solid var(--accent)';
+      canvas.style.borderRadius = '4px';
+      canvas.style.margin = '10px 0';
+      
+      const ctx = canvas.getContext('2d');
+      let frame = 0;
+      
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw file system
+        const files = [
+          { x: 50, y: 50, name: 'documents' },
+          { x: 150, y: 50, name: 'photos' },
+          { x: 250, y: 50, name: 'videos' },
+          { x: 350, y: 50, name: 'backups' }
+        ];
+        
+        // Draw files
+        files.forEach(file => {
+          ctx.fillStyle = 'var(--accent)';
+          ctx.fillRect(file.x, file.y, 40, 40);
+          ctx.fillStyle = 'var(--text-secondary)';
+          ctx.fillText(file.name, file.x, file.y + 60);
+        });
+        
+        // Draw encryption effect
+        const progress = Math.min(frame / 180, 1);
+        const encryptY = 50 + progress * 100;
+        
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+        ctx.fillRect(0, encryptY - 10, canvas.width, 20);
+        
+        // Draw ransom note
+        if (progress > 0.8) {
+          ctx.fillStyle = 'var(--neon-pink)';
+          ctx.font = 'bold 16px monospace';
+          ctx.fillText('YOUR FILES HAVE BEEN ENCRYPTED', 50, 180);
+          ctx.font = '12px monospace';
+          ctx.fillText('Send 1 BTC to unlock', 50, 200);
+        }
+        
+        if (progress < 1) {
+          frame++;
+          requestAnimationFrame(animate);
+        } else {
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--accent);">Ransomware Simulation Complete</span>
+              <span style="color: var(--text-secondary);">This is just a simulation!</span>
+              <span style="color: var(--neon-pink);">No actual files were harmed.</span>
+            </div>`;
+        }
+      };
+      
+      animate();
+      return `
+        <span style="color: var(--neon-pink);">RANSOMWARE SIMULATION</span>
+        <div id="ransomware-animation"></div>
       `;
     }
   };
