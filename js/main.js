@@ -17,11 +17,20 @@ try {
   
   if (!terminalOutput || !terminalInput) throw new Error('Terminal elements not found');
   
-  // Welcome message
+  // Welcome message with smaller ASCII art
   const welcomeMessage = `
-  <span style="color: var(--accent);">Welcome to Rashed Omar's Portfolio Terminal v2.0</span>
+  <span style="color: var(--accent); font-size: 0.8em;">
+  ██████╗  █████╗ ███████╗██╗  ██╗███████╗██████╗ 
+  ██╔══██╗██╔══██╗██╔════╝██║  ██║██╔════╝██╔══██╗
+  ██████╔╝███████║███████╗███████║█████╗  ██║  ██║
+  ██╔══██╗██╔══██║╚════██║██╔══██║██╔══╝  ██║  ██║
+  ██║  ██║██║  ██║███████║██║  ██║███████╗██████╔╝
+  ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═════╝ 
+  </span>
   
-  <span style="color: var(--neon-pink);">Type 'help' to see available commands</span>
+  <span style="color: var(--neon-pink);">Welcome to Rashed Omar's Portfolio Terminal v2.0</span>
+  
+  <span style="color: var(--text-secondary);">Type 'help' to see available commands</span>
   <span style="color: var(--text-secondary);">Last login: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</span>
   `;
   
@@ -31,7 +40,7 @@ try {
   const commandHistory = [];
   let historyIndex = -1;
   
-  // Auto-completion functionality
+  // Auto-completion functionality with new commands
   const availableCommands = [
     'help', 'about', 'skills', 'projects', 'contact', 'game', 'clear',
     'git log', 'aws status', 'docker ps', 'terraform plan', 'kubernetes status',
@@ -39,7 +48,18 @@ try {
     'laravel deploy', 'npm run', 'ls', 'whoami', 'sudo npm install',
     'hack nasa', 'hack google', 'hack portfolio', 'ssh user@example.com',
     'ping google.com', 'neofetch', 'uname -a', 'rm -rf /',
-    'joke', 'ai chat', 'ai generate', 'ai predict', 'exit'
+    'joke', 'ai chat', 'ai generate', 'ai predict', 'exit',
+    // Existing cool commands
+    'matrix', 'glitch', 'rainbow', 'ascii', 'fortune', 'cowsay',
+    'hackerman', 'crypto', 'weather', 'moon', 'stars', 'fire',
+    'cyberpunk', 'retro', 'neon', 'hologram', 'scan', 'decrypt',
+    'encrypt', 'bypass', 'inject', 'exploit', 'backdoor', 'rootkit',
+    // New cool commands
+    'pulse', 'wave', 'binary', 'quantum', 'dna', 'virus',
+    'worm', 'trojan', 'phishing', 'ddos', 'bruteforce', 'sniff',
+    'spoof', 'mitm', 'keylogger', 'ransomware', 'botnet', 'zero-day',
+    'nuclear', 'laser', 'plasma', 'fusion', 'antimatter', 'teleport',
+    'time', 'dimension', 'portal', 'void', 'nebula', 'cosmos'
   ];
   
   // Auto-complete function
@@ -82,11 +102,51 @@ try {
     }, 200);
   });
   
+  // Add animation helper functions at the top of the file
+  function createProgressBar(percentage, color = 'var(--accent)') {
+    const width = 50;
+    const filled = Math.floor(width * (percentage / 100));
+    const empty = width - filled;
+    return `<div style="background: rgba(100, 255, 218, 0.1); height: 20px; width: 100%; border-radius: 5px; margin: 5px 0;">
+      <div style="background: linear-gradient(90deg, ${color}, #FFEB3B); height: 20px; width: ${percentage}%; border-radius: 5px; transition: width 0.5s ease;"></div>
+    </div>`;
+  }
+  
+  function createMatrixText(text, speed = 50) {
+    let output = '';
+    for (let i = 0; i < text.length; i++) {
+      output += `<span style="color: var(--accent); animation: matrix-fade ${speed}ms ${i * speed}ms forwards;">${text[i]}</span>`;
+    }
+    return output;
+  }
+  
+  function createGlitchText(text) {
+    return text.split('').map(char => 
+      `<span style="animation: glitch 0.3s infinite;">${char}</span>`
+    ).join('');
+  }
+  
+  // Helper functions for text effects
+  function createRainbowText(text) {
+    const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'];
+    return text.split('').map((char, i) => 
+      `<span style="color: ${colors[i % colors.length]}; animation: rainbow 2s infinite ${i * 0.1}s;">${char}</span>`
+    ).join('');
+  }
+  
+  function createNeonText(text) {
+    return text.split('').map(char => 
+      `<span style="text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent);">${char}</span>`
+    ).join('');
+  }
+  
   // Define command implementations
   const commands = {
     help: () => {
       return `
         <span style="color: var(--accent);">Available commands:</span>
+        
+        <span style="color: var(--neon-pink);">Basic Commands:</span>
         <span style="color: var(--text-secondary);">help</span> - Show this help message
         <span style="color: var(--text-secondary);">about</span> - About Rashed Omar
         <span style="color: var(--text-secondary);">skills</span> - List skills and expertise
@@ -94,11 +154,13 @@ try {
         <span style="color: var(--text-secondary);">contact</span> - Contact information
         <span style="color: var(--text-secondary);">game</span> - Play Network Infiltration game
         <span style="color: var(--text-secondary);">clear</span> - Clear terminal
-        <span style="color: var(--accent);">AI commands:</span>
+        
+        <span style="color: var(--neon-pink);">AI Commands:</span>
         <span style="color: var(--text-secondary);">ai chat [prompt]</span> - Chat with the AI assistant
         <span style="color: var(--text-secondary);">ai generate [prompt]</span> - Generate code samples
         <span style="color: var(--text-secondary);">ai predict [domain]</span> - Get AI predictions
-        <span style="color: var(--accent);">Advanced commands:</span>
+        
+        <span style="color: var(--neon-pink);">System Commands:</span>
         <span style="color: var(--text-secondary);">git log</span> - Show recent git activity
         <span style="color: var(--text-secondary);">aws status</span> - Check AWS services status
         <span style="color: var(--text-secondary);">docker ps</span> - List running containers
@@ -113,13 +175,80 @@ try {
         <span style="color: var(--text-secondary);">ls</span> - List directory contents
         <span style="color: var(--text-secondary);">whoami</span> - Show current user
         <span style="color: var(--text-secondary);">sudo</span> - Run command as administrator
-        <span style="color: var(--text-secondary);">hack</span> - Try a hacking simulation
-        <span style="color: var(--text-secondary);">ssh</span> - Connect to remote server
-        <span style="color: var(--text-secondary);">ping</span> - Ping a host
-        <span style="color: var(--text-secondary);">neofetch</span> - Display system info
-        <span style="color: var(--text-secondary);">uname</span> - Print system information
-        <span style="color: var(--text-secondary);">rm -rf</span> - Remove files (with caution!)
+        
+        <span style="color: var(--neon-pink);">Visual Effects:</span>
+        <span style="color: var(--text-secondary);">matrix</span> - Activate Matrix rain effect
+        <span style="color: var(--text-secondary);">glitch</span> - Create glitch text effect
+        <span style="color: var(--text-secondary);">rainbow</span> - Display rainbow text
+        <span style="color: var(--text-secondary);">ascii [type]</span> - Show ASCII art
+        <span style="color: var(--text-secondary);">pulse</span> - Show pulsing progress bar
+        <span style="color: var(--text-secondary);">wave</span> - Display wave patterns
+        <span style="color: var(--text-secondary);">binary</span> - Show binary stream
+        <span style="color: var(--text-secondary);">neon</span> - Activate neon text mode
+        <span style="color: var(--text-secondary);">hologram</span> - Simulate holographic interface
+        
+        <span style="color: var(--neon-pink);">Fun Commands:</span>
+        <span style="color: var(--text-secondary);">fortune</span> - Show random programming fortune
+        <span style="color: var(--text-secondary);">cowsay [message]</span> - Make a cow say something
         <span style="color: var(--text-secondary);">joke</span> - Tell a programmer joke
+        <span style="color: var(--text-secondary);">crypto</span> - Show cryptocurrency prices
+        <span style="color: var(--text-secondary);">weather</span> - Show weather simulation
+        <span style="color: var(--text-secondary);">moon</span> - Show moon phase
+        <span style="color: var(--text-secondary);">stars</span> - Create starfield effect
+        <span style="color: var(--text-secondary);">fire</span> - Show fire animation
+        
+        <span style="color: var(--neon-pink);">Theme Commands:</span>
+        <span style="color: var(--text-secondary);">cyberpunk</span> - Activate cyberpunk mode
+        <span style="color: var(--text-secondary);">retro</span> - Activate retro DOS mode
+        
+        <span style="color: var(--neon-pink);">Security Simulations:</span>
+        <span style="color: var(--text-secondary);">hackerman</span> - Simulate hacking sequence
+        <span style="color: var(--text-secondary);">scan</span> - Simulate system scan
+        <span style="color: var(--text-secondary);">decrypt</span> - Simulate decryption
+        <span style="color: var(--text-secondary);">encrypt</span> - Simulate encryption
+        <span style="color: var(--text-secondary);">bypass</span> - Simulate security bypass
+        <span style="color: var(--text-secondary);">inject</span> - Simulate code injection
+        <span style="color: var(--text-secondary);">exploit</span> - Simulate vulnerability exploit
+        <span style="color: var(--text-secondary);">backdoor</span> - Simulate backdoor installation
+        <span style="color: var(--text-secondary);">rootkit</span> - Simulate rootkit deployment
+        <span style="color: var(--text-secondary);">virus</span> - Simulate virus attack
+        <span style="color: var(--text-secondary);">worm</span> - Simulate worm propagation
+        <span style="color: var(--text-secondary);">trojan</span> - Simulate trojan horse
+        <span style="color: var(--text-secondary);">phishing</span> - Simulate phishing attempt
+        <span style="color: var(--text-secondary);">ddos</span> - Simulate DDoS attack
+        <span style="color: var(--text-secondary);">bruteforce</span> - Simulate password cracking
+        <span style="color: var(--text-secondary);">sniff</span> - Simulate packet sniffing
+        <span style="color: var(--text-secondary);">spoof</span> - Simulate IP spoofing
+        <span style="color: var(--text-secondary);">mitm</span> - Simulate man-in-the-middle attack
+        <span style="color: var(--text-secondary);">keylogger</span> - Simulate keylogger
+        <span style="color: var(--text-secondary);">ransomware</span> - Simulate ransomware attack
+        <span style="color: var(--text-secondary);">botnet</span> - Simulate botnet operation
+        <span style="color: var(--text-secondary);">zero-day</span> - Simulate zero-day exploit
+        
+        <span style="color: var(--neon-pink);">Scientific Simulations:</span>
+        <span style="color: var(--text-secondary);">quantum</span> - Simulate quantum computation
+        <span style="color: var(--text-secondary);">dna</span> - Show DNA sequence
+        <span style="color: var(--text-secondary);">nuclear</span> - Simulate nuclear reaction
+        <span style="color: var(--text-secondary);">laser</span> - Simulate laser operation
+        <span style="color: var(--text-secondary);">plasma</span> - Simulate plasma state
+        <span style="color: var(--text-secondary);">fusion</span> - Simulate fusion reaction
+        <span style="color: var(--text-secondary);">antimatter</span> - Simulate antimatter
+        
+        <span style="color: var(--neon-pink);">Space & Time:</span>
+        <span style="color: var(--text-secondary);">teleport</span> - Simulate teleportation
+        <span style="color: var(--text-secondary);">time</span> - Simulate time manipulation
+        <span style="color: var(--text-secondary);">dimension</span> - Simulate dimensional travel
+        <span style="color: var(--text-secondary);">portal</span> - Simulate portal creation
+        <span style="color: var(--text-secondary);">void</span> - Simulate void creation
+        <span style="color: var(--text-secondary);">nebula</span> - Simulate nebula formation
+        <span style="color: var(--text-secondary);">cosmos</span> - Simulate universe creation
+        
+        <span style="color: var(--neon-pink);">Network Commands:</span>
+        <span style="color: var(--text-secondary);">hack [target]</span> - Try a hacking simulation
+        <span style="color: var(--text-secondary);">ssh [user@host]</span> - Connect to remote server
+        <span style="color: var(--text-secondary);">ping [host]</span> - Ping a host
+        <span style="color: var(--text-secondary);">neofetch</span> - Display system info
+        <span style="color: var(--text-secondary);">uname -a</span> - Print system information
       `;
     },
     about: () => {
@@ -444,21 +573,42 @@ try {
       const target = args[0] || 'unknown';
       const targetDisplayName = target.charAt(0).toUpperCase() + target.slice(1);
       
-      return `
-        <span style="color: var(--neon-pink);">HACK SIMULATION: ${targetDisplayName}</span>
-        
-        <span style="color: var(--text-secondary);">Initializing attack vectors...</span>
-        <span style="color: var(--text-secondary);">Scanning for vulnerabilities...</span>
-        <span style="color: var(--text-secondary);">Establishing secure connection...</span>
-        <span style="color: var(--text-secondary);">Bypassing firewall...</span>
-        <span style="color: var(--text-secondary);">Cracking passwords...</span>
-        <span style="color: var(--text-secondary);">Gaining system access...</span>
-        
-        <span style="color: var(--accent);">ACCESS DENIED</span>
-        <span style="color: var(--text-secondary);">This is just a simulation! No actual hacking is happening.</span>
-        <span style="color: var(--text-secondary);">Hacking is illegal and unethical unless you have explicit permission.</span>
-        <span style="color: var(--text-secondary);">This command is just for fun in this portfolio demo.</span>
-      `;
+      const progressSteps = [
+        { text: "Initializing attack vectors...", progress: 10 },
+        { text: "Scanning for vulnerabilities...", progress: 25 },
+        { text: "Establishing secure connection...", progress: 40 },
+        { text: "Bypassing firewall...", progress: 55 },
+        { text: "Cracking passwords...", progress: 70 },
+        { text: "Gaining system access...", progress: 85 },
+        { text: "Finalizing breach...", progress: 100 }
+      ];
+
+      let output = `<span style="color: var(--neon-pink);">HACK SIMULATION: ${targetDisplayName}</span>\n`;
+      
+      progressSteps.forEach((step, index) => {
+        setTimeout(() => {
+          const progressBar = '█'.repeat(Math.floor(step.progress / 10)) + '░'.repeat(10 - Math.floor(step.progress / 10));
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--text-secondary);">${step.text}</span>
+              <span style="color: var(--accent);">[${progressBar}] ${step.progress}%</span>
+            </div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, index * 1000);
+      });
+
+      setTimeout(() => {
+        terminalOutput.innerHTML += `
+          <div>
+            <span style="color: var(--accent);">ACCESS DENIED</span>
+            <span style="color: var(--text-secondary);">This is just a simulation! No actual hacking is happening.</span>
+            <span style="color: var(--text-secondary);">Hacking is illegal and unethical unless you have explicit permission.</span>
+            <span style="color: var(--text-secondary);">This command is just for fun in this portfolio demo.</span>
+          </div>`;
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      }, progressSteps.length * 1000);
+
+      return output;
     },
     sudo: (args) => {
       if (args.length === 0) {
@@ -549,8 +699,34 @@ try {
         const browserName = browser ? browser[1] : "unknown";
         const browserVersion = browser ? browser[2] : "0.0";
         
+        const kernelVersions = [
+          "5.15.0-generic",
+          "5.19.0-generic",
+          "6.0.0-generic",
+          "6.1.0-generic",
+          "6.2.0-generic"
+        ];
+        
+        const architectures = ["x86_64", "aarch64", "arm64"];
+        const buildDates = [
+          "2024-01-15",
+          "2024-02-01",
+          "2024-02-15",
+          "2024-03-01",
+          "2024-03-15"
+        ];
+        
+        const randomKernel = kernelVersions[Math.floor(Math.random() * kernelVersions.length)];
+        const randomArch = architectures[Math.floor(Math.random() * architectures.length)];
+        const randomDate = buildDates[Math.floor(Math.random() * buildDates.length)];
+        
         return `
-          <span style="color: var(--text-secondary);">Web-Browser ${browserName} ${browserVersion} Portfolio Terminal ${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 10)} #1 SMP PREEMPT Portfolio ${new Date().toISOString().split('T')[0]} (${Math.floor(Math.random() * 90) + 10}-generic)</span>
+          <span style="color: var(--text-secondary);">Web-Browser ${browserName} ${browserVersion} Portfolio Terminal ${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 10)} #1 SMP PREEMPT ${randomDate} ${randomKernel} ${randomArch}</span>
+          <span style="color: var(--accent);">Kernel: ${randomKernel}</span>
+          <span style="color: var(--accent);">Architecture: ${randomArch}</span>
+          <span style="color: var(--accent);">Build Date: ${randomDate}</span>
+          <span style="color: var(--accent);">Browser: ${browserName} ${browserVersion}</span>
+          <span style="color: var(--neon-pink);">Note: This is simulated system information for demonstration purposes.</span>
         `;
       }
       
@@ -784,6 +960,773 @@ try {
         <span style="color: var(--accent);">ai predict [domain]</span>
       `;
     },
+    matrix: () => {
+      console.log('Matrix command executed');
+      
+      // Show matrix effect
+      showMatrixEffect(true);
+      
+      // Add matrix text animation
+      const matrixText = "ENTERING THE MATRIX...";
+      let output = '';
+      for (let i = 0; i < matrixText.length; i++) {
+        output += `<span style="color: var(--accent); animation: matrix-fade 50ms ${i * 50}ms forwards;">${matrixText[i]}</span>`;
+      }
+      
+      // Add style for matrix fade animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes matrix-fade {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Remove the effect after 5 seconds
+      setTimeout(() => {
+        console.log('Removing matrix effect');
+        showMatrixEffect(false);
+        style.remove();
+      }, 5000);
+      
+      return `
+        <div style="font-family: monospace; position: relative; z-index: 1000;">
+          ${output}
+          <div style="color: var(--neon-pink); margin-top: 10px;">Wake up, Neo...</div>
+          <div style="color: var(--text-secondary); margin-top: 5px;">The Matrix has you...</div>
+          <div style="color: var(--accent); margin-top: 5px;">Follow the white rabbit.</div>
+        </div>
+      `;
+    },
+    glitch: () => {
+      const effect = new GlitchEffect();
+      effectManager.addEffect(effect);
+      
+      setTimeout(() => {
+        effectManager.removeEffect(effect);
+        effect.cleanup();
+      }, 3000);
+      
+      return `
+        <div style="font-family: monospace; font-size: 1.2em;">
+          ${createGlitchText("SYSTEM GLITCH DETECTED")}
+          <div style="color: var(--neon-pink); margin-top: 10px; animation: flicker 0.5s infinite;">WARNING: SYSTEM INSTABILITY DETECTED</div>
+        </div>
+      `;
+    },
+    rainbow: () => {
+      const effect = new RainbowEffect();
+      effectManager.addEffect(effect);
+      
+      setTimeout(() => {
+        effectManager.removeEffect(effect);
+        effect.cleanup();
+      }, 5000);
+      
+      return `
+        <div style="font-family: monospace; font-size: 1.2em;">
+          ${createRainbowText("RAINBOW MODE ACTIVATED")}
+          <div style="margin-top: 10px;">
+            ${['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3']
+              .map(color => `<span style="color: ${color}; animation: rainbow 2s infinite;">█</span>`)
+              .join('')}
+          </div>
+        </div>
+      `;
+    },
+    ascii: (args) => {
+      const art = {
+        'hacker': `
+        <pre style="color: var(--accent);">
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+        </pre>`,
+        'skull': `
+        <pre style="color: var(--neon-pink);">
+        ████████████████████████████
+        ███████▀▀▀░░░░░░░▀▀▀███████
+        ████▀░░░░░░░░░░░░░░░░░▀████
+        ███│░░░░░░░░░░░░░░░░░░░│███
+        ██▌│░░░░░░░░░░░░░░░░░░░│▐██
+        ██░└┐░░░░░░░░░░░░░░░░░┌┘░██
+        ██░░└┐░░░░░░░░░░░░░░░┌┘░░██
+        ██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██
+        ██▌░│██████▌░░░▐██████│░▐██
+        ███░│▐███▀▀░░▄░░▀▀███▌│░███
+        ██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██
+        ██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██
+        ████▄─┘██▌░░░░░░░▐██└─▄████
+        █████░░▐█─┬┬┬┬┬┬┬─█▌░░█████
+        ████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████
+        █████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████
+        ███████▄░░░░░░░░░░░▄███████
+        ██████████▄▄▄▄▄▄▄██████████
+        </pre>`
+      };
+      
+      const type = args[0] || 'hacker';
+      return art[type] || art['hacker'];
+    },
+    fortune: () => {
+      const fortunes = [
+        "A bug in the hand is better than one as yet undetected.",
+        "A clean house is a sign of a broken computer.",
+        "A computer lets you make more mistakes faster than any other invention.",
+        "A computer scientist is someone who fixes things that aren't broken.",
+        "A journey of a thousand sites begins with a single click.",
+        "A program is never less than 90% complete, and never more than 95% complete.",
+        "A user interface is like a joke. If you have to explain it, it's not that good.",
+        "After all is said and done, a hell of a lot more is said than done.",
+        "All computers wait at the same speed.",
+        "Any program that runs right is obsolete."
+      ];
+      return `<span style="color: var(--accent);">${fortunes[Math.floor(Math.random() * fortunes.length)]}</span>`;
+    },
+    cowsay: (args) => {
+      const message = args.join(' ') || "Moo!";
+      return `
+        <pre style="color: var(--neon-pink);">
+        ${message}
+        <span style="color: var(--accent);">
+          \\   ^__^
+           \\  (oo)\\_______
+              (__)\\       )\\/\\
+                  ||----w |
+                  ||     ||
+        </span>
+        </pre>
+      `;
+    },
+    hackerman: () => {
+      const phrases = [
+        "ACCESSING MAINFRAME...",
+        "BYPASSING FIREWALL...",
+        "DECRYPTING ENCRYPTION...",
+        "INJECTING PAYLOAD...",
+        "EXPLOITING VULNERABILITY...",
+        "ESTABLISHING BACKDOOR...",
+        "COVERING TRACKS..."
+      ];
+      
+      let output = '';
+      phrases.forEach((phrase, index) => {
+        setTimeout(() => {
+          terminalOutput.innerHTML += `<div style="color: var(--neon-pink);">${phrase}</div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, index * 1000);
+      });
+      
+      return `<span style="color: var(--accent);">INITIATING HACKER PROTOCOL...</span>`;
+    },
+    crypto: () => {
+      const coins = ['BTC', 'ETH', 'XRP', 'ADA', 'DOT'];
+      let output = '<span style="color: var(--accent);">CRYPTO PRICES (SIMULATED)</span>\n';
+      
+      coins.forEach(coin => {
+        const price = (Math.random() * 100000).toFixed(2);
+        const change = (Math.random() * 20 - 10).toFixed(2);
+        const color = change >= 0 ? 'var(--accent)' : 'var(--neon-pink)';
+        output += `<span style="color: var(--text-secondary);">${coin}:</span> $${price} <span style="color: ${color}">(${change}%)</span>\n`;
+      });
+      
+      return output;
+    },
+    weather: () => {
+      const conditions = ['☀️ Sunny', '🌧️ Rainy', '⛈️ Stormy', '❄️ Snowy', '🌪️ Tornado'];
+      const condition = conditions[Math.floor(Math.random() * conditions.length)];
+      const temp = Math.floor(Math.random() * 40 - 10);
+      
+      return `
+        <span style="color: var(--accent);">WEATHER SIMULATION</span>
+        <span style="color: var(--text-secondary);">Current condition: ${condition}</span>
+        <span style="color: var(--text-secondary);">Temperature: ${temp}°C</span>
+        <span style="color: var(--neon-pink);">Note: This is a simulated weather report</span>
+      `;
+    },
+    moon: () => {
+      const phases = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+      const phase = phases[Math.floor(Math.random() * phases.length)];
+      
+      return `
+        <span style="color: var(--accent);">MOON PHASE SIMULATION</span>
+        <span style="color: var(--text-secondary);">Current phase: ${phase}</span>
+        <span style="color: var(--neon-pink);">Note: This is a simulated moon phase</span>
+      `;
+    },
+    stars: () => {
+      let output = '<span style="color: var(--accent);">STARFIELD SIMULATION</span>\n';
+      for (let i = 0; i < 20; i++) {
+        const x = Math.floor(Math.random() * 50);
+        const y = Math.floor(Math.random() * 10);
+        const brightness = Math.floor(Math.random() * 3) + 1;
+        output += `<span style="color: var(--text-secondary);">${' '.repeat(x)}${'*'.repeat(brightness)}</span>\n`;
+      }
+      return output;
+    },
+    fire: () => {
+      const fireChars = ['🔥', '💥', '🔥', '💥', '🔥'];
+      let output = '<span style="color: var(--accent);">FIRE SIMULATION</span>\n';
+      for (let i = 0; i < 5; i++) {
+        output += `<span style="color: var(--neon-pink);">${fireChars.join(' ')}</span>\n`;
+      }
+      return output;
+    },
+    cyberpunk: () => {
+      return `
+        <span style="color: var(--neon-pink);">CYBERPUNK MODE ACTIVATED</span>
+        <span style="color: var(--accent);">[SYSTEM OVERRIDE]</span>
+        <span style="color: var(--text-secondary);">> Neural interface established</span>
+        <span style="color: var(--text-secondary);">> Augmented reality overlay active</span>
+        <span style="color: var(--text-secondary);">> Cyberdeck initialized</span>
+        <span style="color: var(--neon-pink);">Welcome to the future, netrunner.</span>
+      `;
+    },
+    retro: () => {
+      return `
+        <span style="color: var(--accent);">RETRO MODE ACTIVATED</span>
+        <span style="color: var(--text-secondary);">> Loading DOS...</span>
+        <span style="color: var(--text-secondary);">> Initializing BASIC...</span>
+        <span style="color: var(--text-secondary);">> Ready.</span>
+        <span style="color: var(--neon-pink);">C:\\>_</span>
+      `;
+    },
+    neon: () => {
+      const colors = ['#ff00ff', '#00ffff', '#ff0000', '#00ff00', '#0000ff'];
+      let output = '';
+      const text = "NEON MODE ACTIVATED";
+      for (let i = 0; i < text.length; i++) {
+        output += `<span style="color: ${colors[i % colors.length]}; text-shadow: 0 0 10px ${colors[i % colors.length]}">${text[i]}</span>`;
+      }
+      return output;
+    },
+    hologram: () => {
+      return `
+        <span style="color: var(--accent);">HOLOGRAM SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Scanning environment...</span>
+        <span style="color: var(--text-secondary);">> Generating holographic interface...</span>
+        <span style="color: var(--text-secondary);">> Calibrating display...</span>
+        <span style="color: var(--neon-pink);">Hologram ready for interaction</span>
+      `;
+    },
+    scan: () => {
+      const scanSteps = [
+        { text: "Initializing system scan...", progress: 0 },
+        { text: "Scanning ports...", progress: 20 },
+        { text: "Analyzing vulnerabilities...", progress: 40 },
+        { text: "Checking system integrity...", progress: 60 },
+        { text: "Verifying security protocols...", progress: 80 },
+        { text: "Finalizing scan results...", progress: 100 }
+      ];
+
+      let output = `<span style="color: var(--accent);">SYSTEM SCAN INITIATED</span>\n`;
+      
+      scanSteps.forEach((step, index) => {
+        setTimeout(() => {
+          const progressBar = '█'.repeat(Math.floor(step.progress / 10)) + '░'.repeat(10 - Math.floor(step.progress / 10));
+          terminalOutput.innerHTML += `
+            <div>
+              <span style="color: var(--text-secondary);">${step.text}</span>
+              <span style="color: var(--accent);">[${progressBar}] ${step.progress}%</span>
+            </div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }, index * 1000);
+      });
+
+      setTimeout(() => {
+        const vulnerabilities = Math.floor(Math.random() * 5);
+        const securityScore = Math.floor(Math.random() * 40) + 60; // Score between 60-100
+        
+        terminalOutput.innerHTML += `
+          <div>
+            <span style="color: var(--neon-pink);">Scan complete!</span>
+            <span style="color: var(--accent);">Security Score: ${securityScore}/100</span>
+            <span style="color: var(--text-secondary);">Vulnerabilities found: ${vulnerabilities}</span>
+            <span style="color: var(--text-secondary);">System status: ${securityScore > 80 ? 'Secure' : 'Needs attention'}</span>
+          </div>`;
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      }, scanSteps.length * 1000);
+
+      return output;
+    },
+    decrypt: () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let output = '<span style="color: var(--accent);">DECRYPTION SIMULATION</span>\n';
+      for (let i = 0; i < 5; i++) {
+        let line = '';
+        for (let j = 0; j < 50; j++) {
+          line += chars[Math.floor(Math.random() * chars.length)];
+        }
+        output += `<span style="color: var(--text-secondary);">${line}</span>\n`;
+      }
+      return output;
+    },
+    encrypt: () => {
+      return `
+        <span style="color: var(--accent);">ENCRYPTION SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Generating encryption key...</span>
+        <span style="color: var(--text-secondary);">> Applying AES-256 encryption...</span>
+        <span style="color: var(--text-secondary);">> Securing data transmission...</span>
+        <span style="color: var(--neon-pink);">Encryption complete. Data secured.</span>
+      `;
+    },
+    bypass: () => {
+      return `
+        <span style="color: var(--accent);">BYPASS SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Analyzing security protocols...</span>
+        <span style="color: var(--text-secondary);">> Identifying weak points...</span>
+        <span style="color: var(--text-secondary);">> Executing bypass sequence...</span>
+        <span style="color: var(--neon-pink);">Access granted. Welcome to the system.</span>
+      `;
+    },
+    inject: () => {
+      return `
+        <span style="color: var(--accent);">INJECTION SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Preparing payload...</span>
+        <span style="color: var(--text-secondary);">> Bypassing security measures...</span>
+        <span style="color: var(--text-secondary);">> Injecting code...</span>
+        <span style="color: var(--neon-pink);">Injection successful. System compromised.</span>
+      `;
+    },
+    exploit: () => {
+      return `
+        <span style="color: var(--accent);">EXPLOIT SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Scanning for vulnerabilities...</span>
+        <span style="color: var(--text-secondary);">> Testing exploit vectors...</span>
+        <span style="color: var(--text-secondary);">> Executing exploit chain...</span>
+        <span style="color: var(--neon-pink);">Exploit successful. System access obtained.</span>
+      `;
+    },
+    backdoor: () => {
+      return `
+        <span style="color: var(--accent);">BACKDOOR SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Creating hidden entry point...</span>
+        <span style="color: var(--text-secondary);">> Establishing persistent connection...</span>
+        <span style="color: var(--text-secondary);">> Covering tracks...</span>
+        <span style="color: var(--neon-pink);">Backdoor installed. Access maintained.</span>
+      `;
+    },
+    rootkit: () => {
+      return `
+        <span style="color: var(--accent);">ROOTKIT SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Elevating privileges...</span>
+        <span style="color: var(--text-secondary);">> Installing kernel module...</span>
+        <span style="color: var(--text-secondary);">> Hiding presence...</span>
+        <span style="color: var(--neon-pink);">Rootkit deployed. System owned.</span>
+      `;
+    },
+    pulse: () => {
+      return `
+        <span style="color: var(--accent);">PULSE SIMULATION</span>
+        <span style="color: var(--text-secondary);">[█░░░░░░░░░] 10%</span>
+        <span style="color: var(--text-secondary);">[███░░░░░░░] 30%</span>
+        <span style="color: var(--text-secondary);">[█████░░░░░] 50%</span>
+        <span style="color: var(--text-secondary);">[███████░░░] 70%</span>
+        <span style="color: var(--text-secondary);">[█████████░] 90%</span>
+        <span style="color: var(--neon-pink);">[██████████] 100%</span>
+        <span style="color: var(--accent);">Pulse complete. System energized.</span>
+      `;
+    },
+    wave: () => {
+      const wave = "~".repeat(50);
+      return `
+        <span style="color: var(--accent);">WAVE SIMULATION</span>
+        <span style="color: var(--text-secondary);">${wave}</span>
+        <span style="color: var(--text-secondary);">${wave}</span>
+        <span style="color: var(--text-secondary);">${wave}</span>
+        <span style="color: var(--neon-pink);">Wave pattern established.</span>
+      `;
+    },
+    binary: () => {
+      let output = '<span style="color: var(--accent);">BINARY STREAM</span>\n';
+      for (let i = 0; i < 5; i++) {
+        let line = '';
+        for (let j = 0; j < 50; j++) {
+          line += Math.random() > 0.5 ? '1' : '0';
+        }
+        output += `<span style="color: var(--text-secondary);">${line}</span>\n`;
+      }
+      return output;
+    },
+    quantum: () => {
+      const states = ['|0⟩', '|1⟩', '|+⟩', '|-⟩', '|ψ⟩'];
+      let output = '';
+      for (let i = 0; i < 5; i++) {
+        const state = states[Math.floor(Math.random() * states.length)];
+        output += `<span style="color: var(--accent); animation: quantum-superposition 1s ${i * 0.2}s infinite;">${state}</span> `;
+      }
+      return `
+        <div style="font-family: monospace;">
+          <div style="color: var(--neon-pink);">QUANTUM COMPUTATION SIMULATION</div>
+          <div style="margin: 10px 0;">${output}</div>
+          <div style="color: var(--text-secondary);">Entanglement in progress...</div>
+          ${createProgressBar(75, 'var(--neon-pink)')}
+          <div style="color: var(--accent); margin-top: 10px;">Quantum state: |ψ⟩ = 1/√2(|0⟩ + |1⟩)</div>
+        </div>
+      `;
+    },
+    dna: () => {
+      const bases = ['A', 'T', 'C', 'G'];
+      let sequence = '';
+      for (let i = 0; i < 20; i++) {
+        sequence += bases[Math.floor(Math.random() * bases.length)];
+      }
+      return `
+        <div style="font-family: monospace;">
+          <div style="color: var(--neon-pink);">DNA SEQUENCE SIMULATION</div>
+          <div style="margin: 10px 0; color: var(--accent);">${sequence}</div>
+          <div style="color: var(--text-secondary);">Complementary strand:</div>
+          <div style="margin: 10px 0; color: var(--accent);">${sequence.split('').map(base => {
+            switch(base) {
+              case 'A': return 'T';
+              case 'T': return 'A';
+              case 'C': return 'G';
+              case 'G': return 'C';
+            }
+          }).join('')}</div>
+          <div style="color: var(--neon-pink); margin-top: 10px;">DNA helix structure visualized</div>
+          <pre style="color: var(--accent); margin-top: 10px;">
+      A-T
+     /   \\
+    G-C   G-C
+   /     /   \\
+  A-T   A-T   A-T
+   \\   /     /
+    G-C   G-C
+     \\   /
+      A-T
+          </pre>
+        </div>
+      `;
+    },
+    virus: () => {
+      return `
+        <span style="color: var(--accent);">VIRUS SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Analyzing viral structure...</span>
+        <span style="color: var(--text-secondary);">> Replicating genetic material...</span>
+        <span style="color: var(--text-secondary);">> Injecting payload...</span>
+        <span style="color: var(--neon-pink);">Virus simulation complete. System safe.</span>
+      `;
+    },
+    worm: () => {
+      return `
+        <span style="color: var(--accent);">WORM SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Propagating through network...</span>
+        <span style="color: var(--text-secondary);">> Exploiting vulnerabilities...</span>
+        <span style="color: var(--text-secondary);">> Self-replicating...</span>
+        <span style="color: var(--neon-pink);">Worm contained. System secure.</span>
+      `;
+    },
+    trojan: () => {
+      return `
+        <span style="color: var(--accent);">TROJAN SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Disguising payload...</span>
+        <span style="color: var(--text-secondary);">> Bypassing defenses...</span>
+        <span style="color: var(--text-secondary);">> Establishing persistence...</span>
+        <span style="color: var(--neon-pink);">Trojan detected and removed.</span>
+      `;
+    },
+    phishing: () => {
+      return `
+        <span style="color: var(--accent);">PHISHING SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Crafting deceptive message...</span>
+        <span style="color: var(--text-secondary);">> Spoofing sender identity...</span>
+        <span style="color: var(--text-secondary);">> Deploying bait...</span>
+        <span style="color: var(--neon-pink);">Phishing attempt blocked.</span>
+      `;
+    },
+    ddos: () => {
+      return `
+        <span style="color: var(--accent);">DDoS SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Coordinating botnet...</span>
+        <span style="color: var(--text-secondary);">> Amplifying traffic...</span>
+        <span style="color: var(--text-secondary);">> Overwhelming target...</span>
+        <span style="color: var(--neon-pink);">DDoS mitigated. Service restored.</span>
+      `;
+    },
+    bruteforce: () => {
+      return `
+        <span style="color: var(--accent);">BRUTEFORCE SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Testing password combinations...</span>
+        <span style="color: var(--text-secondary);">> Attempting character sets...</span>
+        <span style="color: var(--text-secondary);">> Analyzing patterns...</span>
+        <span style="color: var(--neon-pink);">Bruteforce attempt blocked.</span>
+      `;
+    },
+    sniff: () => {
+      return `
+        <span style="color: var(--accent);">PACKET SNIFFING SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Capturing network traffic...</span>
+        <span style="color: var(--text-secondary);">> Analyzing packets...</span>
+        <span style="color: var(--text-secondary);">> Extracting data...</span>
+        <span style="color: var(--neon-pink);">Sniffing attempt detected.</span>
+      `;
+    },
+    spoof: () => {
+      return `
+        <span style="color: var(--accent);">IP SPOOFING SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Forging packet headers...</span>
+        <span style="color: var(--text-secondary);">> Masking source address...</span>
+        <span style="color: var(--text-secondary);">> Bypassing filters...</span>
+        <span style="color: var(--neon-pink);">Spoofing attempt blocked.</span>
+      `;
+    },
+    mitm: () => {
+      return `
+        <span style="color: var(--accent);">MAN-IN-THE-MIDDLE SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Intercepting communication...</span>
+        <span style="color: var(--text-secondary);">> Relaying messages...</span>
+        <span style="color: var(--text-secondary);">> Modifying traffic...</span>
+        <span style="color: var(--neon-pink);">MITM attack prevented.</span>
+      `;
+    },
+    keylogger: () => {
+      return `
+        <span style="color: var(--accent);">KEYLOGGER SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Monitoring keystrokes...</span>
+        <span style="color: var(--text-secondary);">> Capturing input...</span>
+        <span style="color: var(--text-secondary);">> Logging data...</span>
+        <span style="color: var(--neon-pink);">Keylogger detected and removed.</span>
+      `;
+    },
+    ransomware: () => {
+      return `
+        <span style="color: var(--accent);">RANSOMWARE SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Encrypting files...</span>
+        <span style="color: var(--text-secondary);">> Generating ransom note...</span>
+        <span style="color: var(--text-secondary);">> Demanding payment...</span>
+        <span style="color: var(--neon-pink);">Ransomware blocked. Files safe.</span>
+      `;
+    },
+    botnet: () => {
+      return `
+        <span style="color: var(--accent);">BOTNET SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Recruiting devices...</span>
+        <span style="color: var(--text-secondary);">> Establishing C&C...</span>
+        <span style="color: var(--text-secondary);">> Coordinating attack...</span>
+        <span style="color: var(--neon-pink);">Botnet dismantled.</span>
+      `;
+    },
+    'zero-day': () => {
+      return `
+        <span style="color: var(--accent);">ZERO-DAY EXPLOIT SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Discovering vulnerability...</span>
+        <span style="color: var(--text-secondary);">> Developing exploit...</span>
+        <span style="color: var(--text-secondary);">> Testing payload...</span>
+        <span style="color: var(--neon-pink);">Zero-day patched. System secure.</span>
+      `;
+    },
+    nuclear: () => {
+      return `
+        <span style="color: var(--accent);">NUCLEAR SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Initiating fission...</span>
+        <span style="color: var(--text-secondary);">> Chain reaction started...</span>
+        <span style="color: var(--text-secondary);">> Critical mass achieved...</span>
+        <span style="color: var(--neon-pink);">Simulation contained. No radiation detected.</span>
+      `;
+    },
+    laser: () => {
+      return `
+        <span style="color: var(--accent);">LASER SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Amplifying light...</span>
+        <span style="color: var(--text-secondary);">> Focusing beam...</span>
+        <span style="color: var(--text-secondary);">> Emitting coherent radiation...</span>
+        <span style="color: var(--neon-pink);">Laser deactivated. Safety protocols engaged.</span>
+      `;
+    },
+    plasma: () => {
+      return `
+        <span style="color: var(--accent);">PLASMA SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Ionizing gas...</span>
+        <span style="color: var(--text-secondary);">> Containing charged particles...</span>
+        <span style="color: var(--text-secondary);">> Stabilizing field...</span>
+        <span style="color: var(--neon-pink);">Plasma contained. Magnetic field stable.</span>
+      `;
+    },
+    fusion: () => {
+      return `
+        <span style="color: var(--accent);">FUSION SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Heating plasma...</span>
+        <span style="color: var(--text-secondary);">> Compressing nuclei...</span>
+        <span style="color: var(--text-secondary);">> Initiating reaction...</span>
+        <span style="color: var(--neon-pink);">Fusion achieved. Energy output stable.</span>
+      `;
+    },
+    antimatter: () => {
+      return `
+        <span style="color: var(--accent);">ANTIMATTER SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Generating antiparticles...</span>
+        <span style="color: var(--text-secondary);">> Containing antimatter...</span>
+        <span style="color: var(--text-secondary);">> Stabilizing field...</span>
+        <span style="color: var(--neon-pink);">Antimatter contained. Magnetic trap active.</span>
+      `;
+    },
+    teleport: () => {
+      return `
+        <span style="color: var(--accent);">TELEPORTATION SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Scanning target...</span>
+        <span style="color: var(--text-secondary);">> Disassembling matter...</span>
+        <span style="color: var(--text-secondary);">> Reassembling at destination...</span>
+        <span style="color: var(--neon-pink);">Teleportation complete. Quantum state preserved.</span>
+      `;
+    },
+    time: () => {
+      return `
+        <span style="color: var(--accent);">TIME MANIPULATION SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Bending spacetime...</span>
+        <span style="color: var(--text-secondary);">> Creating temporal field...</span>
+        <span style="color: var(--text-secondary);">> Stabilizing timeline...</span>
+        <span style="color: var(--neon-pink);">Time manipulation contained. Paradox prevented.</span>
+      `;
+    },
+    dimension: () => {
+      return `
+        <span style="color: var(--accent);">DIMENSIONAL SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Opening portal...</span>
+        <span style="color: var(--text-secondary);">> Bridging realities...</span>
+        <span style="color: var(--text-secondary);">> Stabilizing connection...</span>
+        <span style="color: var(--neon-pink);">Dimensional rift sealed. Reality intact.</span>
+      `;
+    },
+    portal: () => {
+      const createPortalRing = (size, color, delay) => {
+        return `
+          <div style="
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            border: 2px solid ${color};
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 2s linear infinite;
+            animation-delay: ${delay}s;
+            opacity: 0.7;
+          "></div>
+        `;
+      };
+
+      const colors = ['var(--neon-pink)', 'var(--accent)', 'var(--neon-purple)'];
+      let portalRings = '';
+      
+      for (let i = 0; i < 5; i++) {
+        portalRings += createPortalRing(100 + i * 20, colors[i % colors.length], i * 0.2);
+      }
+
+      let output = `
+        <div style="position: relative; height: 200px; overflow: hidden; background: #000; border-radius: 5px; margin: 10px 0;">
+          <style>
+            @keyframes rotate {
+              from { transform: translate(-50%, -50%) rotate(0deg); }
+              to { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+          </style>
+          <span style="color: var(--neon-pink); position: absolute; top: 10px; left: 10px; z-index: 1;">PORTAL SIMULATION</span>
+          <div style="position: relative; height: 100%;">
+            ${portalRings}
+            <div style="
+              position: absolute;
+              width: 60px;
+              height: 60px;
+              background: radial-gradient(circle, var(--neon-pink) 0%, transparent 70%);
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              border-radius: 50%;
+              animation: pulse 2s ease-in-out infinite;
+            "></div>
+          </div>
+        </div>
+      `;
+
+      // Add pulse animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes pulse {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+          50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.4; }
+          100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+        }
+      `;
+      document.head.appendChild(style);
+
+      return output + `
+        <span style="color: var(--text-secondary);">> Generating wormhole...</span>
+        <span style="color: var(--text-secondary);">> Stabilizing event horizon...</span>
+        <span style="color: var(--text-secondary);">> Establishing connection...</span>
+        <span style="color: var(--neon-pink);">Portal closed. Spacetime normalized.</span>
+      `;
+    },
+    void: () => {
+      return `
+        <span style="color: var(--accent);">VOID SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Creating vacuum...</span>
+        <span style="color: var(--text-secondary);">> Expanding nothingness...</span>
+        <span style="color: var(--text-secondary);">> Stabilizing emptiness...</span>
+        <span style="color: var(--neon-pink);">Void contained. Reality restored.</span>
+      `;
+    },
+    nebula: () => {
+      return `
+        <span style="color: var(--accent);">NEBULA SIMULATION</span>
+        <span style="color: var(--text-secondary);">> Generating cosmic dust...</span>
+        <span style="color: var(--text-secondary);">> Ionizing gas clouds...</span>
+        <span style="color: var(--text-secondary);">> Creating stellar nursery...</span>
+        <span style="color: var(--neon-pink);">Nebula stabilized. Star formation initiated.</span>
+      `;
+    },
+    cosmos: () => {
+      const createStar = () => {
+        const x = Math.floor(Math.random() * 50);
+        const y = Math.floor(Math.random() * 10);
+        const brightness = Math.floor(Math.random() * 3) + 1;
+        return `<span style="position: absolute; left: ${x}%; top: ${y * 20}px; color: var(--accent);">${'*'.repeat(brightness)}</span>`;
+      };
+
+      const createGalaxy = () => {
+        let galaxy = '';
+        for (let i = 0; i < 20; i++) {
+          galaxy += createStar();
+        }
+        return galaxy;
+      };
+
+      let output = `
+        <div style="position: relative; height: 200px; overflow: hidden; background: #000; border-radius: 5px; margin: 10px 0;">
+          <span style="color: var(--neon-pink); position: absolute; top: 10px; left: 10px;">COSMOS SIMULATION</span>
+          <div id="cosmos-animation" style="position: relative; height: 100%;">
+            ${createGalaxy()}
+          </div>
+        </div>
+      `;
+
+      // Animate stars
+      const animateStars = () => {
+        const cosmosDiv = document.getElementById('cosmos-animation');
+        if (cosmosDiv) {
+          setInterval(() => {
+            cosmosDiv.innerHTML = createGalaxy();
+          }, 2000);
+        }
+      };
+
+      setTimeout(animateStars, 100);
+
+      return output + `
+        <span style="color: var(--text-secondary);">> Expanding universe...</span>
+        <span style="color: var(--text-secondary);">> Generating galaxies...</span>
+        <span style="color: var(--text-secondary);">> Creating cosmic web...</span>
+        <span style="color: var(--neon-pink);">Cosmos simulated. Multiverse stable.</span>
+      `;
+    }
   };
   
   // Process commands function
@@ -1067,6 +2010,8 @@ function showMatrixEffect(show) {
       canvas.style.position = 'absolute';
       canvas.style.top = '0';
       canvas.style.left = '0';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
       
       matrixRain.appendChild(canvas);
       
@@ -1120,5 +2065,561 @@ function showMatrixEffect(show) {
     }
   } else {
     matrixRain.classList.remove('active');
+    const canvas = matrixRain.querySelector('canvas');
+    if (canvas) {
+      canvas.remove();
+    }
   }
-} 
+}
+
+// Add effect management functions
+const effectManager = {
+  activeEffects: new Set(),
+  
+  addEffect(effect) {
+    this.activeEffects.add(effect);
+  },
+  
+  removeEffect(effect) {
+    this.activeEffects.delete(effect);
+  },
+  
+  clearAllEffects() {
+    this.activeEffects.forEach(effect => effect.cleanup());
+    this.activeEffects.clear();
+  }
+};
+
+// Add new effect classes
+class MatrixEffect {
+  constructor() {
+    console.log('MatrixEffect constructor called');
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.setupCanvas();
+    this.setupMatrix();
+    this.startMatrix();
+  }
+
+  setupCanvas() {
+    console.log('Setting up canvas');
+    // Create a container for the matrix effect
+    this.container = document.createElement('div');
+    this.container.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999;
+      pointer-events: none;
+      background: rgba(0, 0, 0, 0.3);
+      mix-blend-mode: screen;
+      overflow: hidden;
+    `;
+    document.body.appendChild(this.container);
+
+    // Setup canvas
+    this.canvas.style.cssText = `
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    `;
+    this.container.appendChild(this.canvas);
+    this.resizeCanvas();
+    window.addEventListener('resize', () => this.resizeCanvas());
+  }
+
+  resizeCanvas() {
+    console.log('Resizing canvas');
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.setupMatrix();
+  }
+
+  setupMatrix() {
+    console.log('Setting up matrix');
+    this.fontSize = 14;
+    this.columns = Math.floor(this.canvas.width / this.fontSize);
+    this.drops = Array(this.columns).fill(1);
+    this.chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
+    this.speeds = Array(this.columns).fill(0).map(() => Math.random() * 2 + 1);
+    this.brightness = Array(this.columns).fill(0).map(() => Math.random() * 0.5 + 0.5);
+  }
+
+  startMatrix() {
+    console.log('Starting matrix animation');
+    const draw = () => {
+      // Clear with a semi-transparent black rectangle
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // Draw characters
+      for (let i = 0; i < this.drops.length; i++) {
+        const char = this.chars[Math.floor(Math.random() * this.chars.length)];
+        const x = i * this.fontSize;
+        const y = this.drops[i] * this.fontSize;
+
+        // Calculate brightness for this character
+        const brightness = this.brightness[i];
+        const color = `rgba(100, 255, 218, ${brightness})`;
+
+        // Draw character with glow effect
+        this.ctx.shadowBlur = 15;
+        this.ctx.shadowColor = color;
+        this.ctx.fillStyle = color;
+        this.ctx.font = `${this.fontSize}px monospace`;
+        this.ctx.fillText(char, x, y);
+        this.ctx.shadowBlur = 0;
+
+        // Update position and speed
+        this.drops[i] += this.speeds[i];
+
+        // Reset drop when it reaches bottom or randomly
+        if (y > this.canvas.height && Math.random() > 0.975) {
+          this.drops[i] = 0;
+          this.speeds[i] = Math.random() * 2 + 1;
+          this.brightness[i] = Math.random() * 0.5 + 0.5;
+        }
+      }
+
+      // Continue animation if effect is still active
+      if (effectManager.activeEffects.has(this)) {
+        requestAnimationFrame(draw);
+      }
+    };
+
+    // Start the animation
+    draw();
+  }
+
+  cleanup() {
+    console.log('Cleaning up matrix effect');
+    if (this.container && this.container.parentNode) {
+      this.container.parentNode.removeChild(this.container);
+    }
+  }
+}
+
+class GlitchEffect {
+  constructor() {
+    this.originalStyles = new Map();
+    this.elements = document.querySelectorAll('*');
+    this.startGlitch();
+  }
+
+  startGlitch() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        this.originalStyles.set(element, {
+          transform: element.style.transform,
+          filter: element.style.filter,
+          textShadow: element.style.textShadow
+        });
+      }
+    });
+    
+    const glitch = () => {
+      this.elements.forEach(element => {
+        if (element.style && Math.random() < 0.1) {
+          element.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+          element.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
+          element.style.textShadow = `${Math.random() * 4 - 2}px ${Math.random() * 4 - 2}px 0 rgba(255, 0, 255, 0.5)`;
+        }
+      });
+      
+      if (effectManager.activeEffects.has(this)) {
+        requestAnimationFrame(glitch);
+      }
+    };
+    
+    glitch();
+  }
+
+  cleanup() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        const original = this.originalStyles.get(element);
+        if (original) {
+          element.style.transform = original.transform;
+          element.style.filter = original.filter;
+          element.style.textShadow = original.textShadow;
+        }
+      }
+    });
+  }
+}
+
+class RainbowEffect {
+  constructor() {
+    this.originalStyles = new Map();
+    this.elements = document.querySelectorAll('*');
+    this.startRainbow();
+  }
+
+  startRainbow() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        this.originalStyles.set(element, {
+          color: element.style.color,
+          background: element.style.background
+        });
+      }
+    });
+    
+    let hue = 0;
+    const rainbow = () => {
+      this.elements.forEach(element => {
+        if (element.style && Math.random() < 0.1) {
+          element.style.color = `hsl(${hue}, 100%, 50%)`;
+          element.style.background = `hsl(${(hue + 180) % 360}, 100%, 50%)`;
+        }
+      });
+      
+      hue = (hue + 1) % 360;
+      
+      if (effectManager.activeEffects.has(this)) {
+        requestAnimationFrame(rainbow);
+      }
+    };
+    
+    rainbow();
+  }
+
+  cleanup() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        const original = this.originalStyles.get(element);
+        if (original) {
+          element.style.color = original.color;
+          element.style.background = original.background;
+        }
+      }
+    });
+  }
+}
+
+class NeonEffect {
+  constructor() {
+    this.originalStyles = new Map();
+    this.elements = document.querySelectorAll('*');
+    this.startNeon();
+  }
+
+  startNeon() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        this.originalStyles.set(element, {
+          textShadow: element.style.textShadow,
+          boxShadow: element.style.boxShadow
+        });
+      }
+    });
+    
+    const neon = () => {
+      this.elements.forEach(element => {
+        if (element.style && Math.random() < 0.1) {
+          const hue = Math.random() * 360;
+          element.style.textShadow = `0 0 5px hsl(${hue}, 100%, 50%), 0 0 10px hsl(${hue}, 100%, 50%), 0 0 20px hsl(${hue}, 100%, 50%)`;
+          element.style.boxShadow = `0 0 10px hsl(${hue}, 100%, 50%), 0 0 20px hsl(${hue}, 100%, 50%)`;
+        }
+      });
+      
+      if (effectManager.activeEffects.has(this)) {
+        requestAnimationFrame(neon);
+      }
+    };
+    
+    neon();
+  }
+
+  cleanup() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        const original = this.originalStyles.get(element);
+        if (original) {
+          element.style.textShadow = original.textShadow;
+          element.style.boxShadow = original.boxShadow;
+        }
+      }
+    });
+  }
+}
+
+class CyberpunkEffect {
+  constructor() {
+    this.originalStyles = new Map();
+    this.elements = document.querySelectorAll('*');
+    this.startCyberpunk();
+  }
+
+  startCyberpunk() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        this.originalStyles.set(element, {
+          background: element.style.background,
+          color: element.style.color,
+          border: element.style.border
+        });
+      }
+    });
+    
+    const cyberpunk = () => {
+      this.elements.forEach(element => {
+        if (element.style && Math.random() < 0.1) {
+          element.style.background = `linear-gradient(45deg, #ff00ff, #00ffff)`;
+          element.style.color = '#ffffff';
+          element.style.border = '2px solid #ff00ff';
+        }
+      });
+      
+      if (effectManager.activeEffects.has(this)) {
+        requestAnimationFrame(cyberpunk);
+      }
+    };
+    
+    cyberpunk();
+  }
+
+  cleanup() {
+    this.elements.forEach(element => {
+      if (element.style) {
+        const original = this.originalStyles.get(element);
+        if (original) {
+          element.style.background = original.background;
+          element.style.color = original.color;
+          element.style.border = original.border;
+        }
+      }
+    });
+  }
+}
+
+// Update the commands
+const commands = {
+  // ... existing commands ...
+  
+  matrix: () => {
+    // Create and start the matrix effect
+    const effect = new MatrixEffect();
+    effectManager.addEffect(effect);
+    
+    // Add matrix text animation
+    const matrixText = "ENTERING THE MATRIX...";
+    let output = '';
+    for (let i = 0; i < matrixText.length; i++) {
+      output += `<span style="color: var(--accent); animation: matrix-fade 50ms ${i * 50}ms forwards;">${matrixText[i]}</span>`;
+    }
+    
+    // Add style for matrix fade animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes matrix-fade {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Remove the effect after 5 seconds
+    setTimeout(() => {
+      effectManager.removeEffect(effect);
+      effect.cleanup();
+      style.remove();
+    }, 5000);
+    
+    return `
+      <div style="font-family: monospace; position: relative; z-index: 1000;">
+        ${output}
+        <div style="color: var(--neon-pink); margin-top: 10px;">Wake up, Neo...</div>
+        <div style="color: var(--text-secondary); margin-top: 5px;">The Matrix has you...</div>
+        <div style="color: var(--accent); margin-top: 5px;">Follow the white rabbit.</div>
+      </div>
+    `;
+  },
+  
+  glitch: () => {
+    const effect = new GlitchEffect();
+    effectManager.addEffect(effect);
+    
+    setTimeout(() => {
+      effectManager.removeEffect(effect);
+      effect.cleanup();
+    }, 3000);
+    
+    return `
+      <div style="font-family: monospace; font-size: 1.2em;">
+        ${createGlitchText("SYSTEM GLITCH DETECTED")}
+        <div style="color: var(--neon-pink); margin-top: 10px; animation: flicker 0.5s infinite;">WARNING: SYSTEM INSTABILITY DETECTED</div>
+      </div>
+    `;
+  },
+  
+  rainbow: () => {
+    const effect = new RainbowEffect();
+    effectManager.addEffect(effect);
+    
+    // Add rainbow text animation
+    const rainbowText = "RAINBOW MODE ACTIVATED";
+    let output = createRainbowText(rainbowText);
+    
+    // Add style for rainbow animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes rainbow {
+        0% { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => {
+      effectManager.removeEffect(effect);
+      effect.cleanup();
+      style.remove();
+    }, 5000);
+    
+    return `
+      <div style="font-family: monospace; font-size: 1.2em;">
+        ${output}
+        <div style="margin-top: 10px;">
+          ${['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3']
+            .map(color => `<span style="color: ${color}; animation: rainbow 2s infinite;">█</span>`)
+            .join('')}
+        </div>
+      </div>
+    `;
+  },
+  
+  neon: () => {
+    const effect = new NeonEffect();
+    effectManager.addEffect(effect);
+    
+    // Add neon text animation
+    const neonText = "NEON MODE ACTIVATED";
+    let output = createNeonText(neonText);
+    
+    // Add style for neon animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes neon-pulse {
+        0% { text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent); }
+        50% { text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent); }
+        100% { text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent); }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    setTimeout(() => {
+      effectManager.removeEffect(effect);
+      effect.cleanup();
+      style.remove();
+    }, 5000);
+    
+    return `
+      <div style="font-family: monospace; font-size: 1.2em;">
+        <div style="animation: neon-pulse 2s infinite;">
+          ${output}
+        </div>
+        <div style="margin-top: 10px; color: var(--accent); text-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent);">
+          Welcome to the neon future
+        </div>
+      </div>
+    `;
+  },
+  
+  cyberpunk: () => {
+    const effect = new CyberpunkEffect();
+    effectManager.addEffect(effect);
+    
+    // Add cyberpunk text animation
+    const cyberpunkText = "CYBERPUNK MODE ACTIVATED";
+    let output = cyberpunkText.split('').map(char => 
+      `<span style="animation: cyberpunk 0.5s infinite;">${char}</span>`
+    ).join('');
+    
+    // Add style for cyberpunk animation
+    setTimeout(() => {
+      effectManager.removeEffect(effect);
+      effect.cleanup();
+    }, 5000);
+    
+    return `
+      <div style="font-family: monospace; font-size: 1.2em;">
+        <div style="color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);">
+          CYBERPUNK MODE ACTIVATED
+        </div>
+        <div style="margin-top: 10px; color: var(--accent);">
+          Welcome to the future, netrunner
+        </div>
+      </div>
+    `;
+  }
+};
+
+// Add cleanup to window unload
+window.addEventListener('unload', () => {
+  effectManager.clearAllEffects();
+});
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes matrix-fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+
+  @keyframes rainbow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+
+  @keyframes flicker {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-text::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--neon-pink);
+    animation: glitch 0.3s infinite;
+  }
+
+  .glitch-text::after {
+    left: -2px;
+    text-shadow: 2px 0 var(--accent);
+    animation: glitch 0.3s infinite reverse;
+  }
+`;
+document.head.appendChild(style);
+
+// ... rest of the existing code ...
