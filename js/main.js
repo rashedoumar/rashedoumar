@@ -186,6 +186,7 @@ try {
         <span style="color: var(--text-secondary);">binary</span> - Show binary stream
         <span style="color: var(--text-secondary);">neon</span> - Activate neon text mode
         <span style="color: var(--text-secondary);">hologram</span> - Simulate holographic interface
+        <span style="color: var(--text-secondary);">destroy</span> - Simulate website destruction and rebuild
         
         <span style="color: var(--neon-pink);">Fun Commands:</span>
         <span style="color: var(--text-secondary);">fortune</span> - Show random programming fortune
@@ -1726,6 +1727,20 @@ try {
         <span style="color: var(--text-secondary);">> Creating cosmic web...</span>
         <span style="color: var(--neon-pink);">Cosmos simulated. Multiverse stable.</span>
       `;
+    },
+    destroy: () => {
+      const effect = new DestroyEffect();
+      effectManager.addEffect(effect);
+      
+      setTimeout(() => {
+        effectManager.removeEffect(effect);
+        effect.cleanup();
+      }, 5000);
+      
+      return `
+        <span style="color: var(--neon-pink);">INITIATING SYSTEM DESTRUCTION...</span>
+        <span style="color: var(--text-secondary);">Warning: This is just a visual effect!</span>
+      `;
     }
   };
   
@@ -2398,6 +2413,560 @@ class CyberpunkEffect {
   }
 }
 
+class DestroyEffect {
+  constructor() {
+    this.elements = document.querySelectorAll('div, nav, footer, header, section, article, aside, .skill-tooltip');
+    this.originalPositions = new Map();
+    this.originalStyles = new Map();
+    this.originalDisplay = new Map();
+    this.particles = [];
+    this.destroyCount = parseInt(localStorage.getItem('destroyCount') || '0');
+    this.startDestroy();
+  }
+
+  startDestroy() {
+    // Increment destroy count
+    this.destroyCount++;
+    localStorage.setItem('destroyCount', this.destroyCount.toString());
+
+    // Check if user is blocked
+    if (this.destroyCount > 3) {
+      this.showBlockedMessage();
+      return;
+    }
+
+    // Store original positions and styles
+    this.elements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      this.originalPositions.set(element, {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height
+      });
+      this.originalStyles.set(element, {
+        transform: element.style.transform,
+        transition: element.style.transition,
+        position: element.style.position,
+        opacity: element.style.opacity,
+        filter: element.style.filter
+      });
+      this.originalDisplay.set(element, element.style.display);
+    });
+
+    // Create particles with more variety
+    this.elements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      const color = getComputedStyle(element).backgroundColor || '#ffffff';
+      const particleCount = Math.floor((rect.width * rect.height) / 1000);
+      
+      for (let i = 0; i < particleCount; i++) {
+        this.particles.push({
+          x: rect.x + Math.random() * rect.width,
+          y: rect.y + Math.random() * rect.height,
+          size: Math.random() * 8 + 2,
+          speedX: (Math.random() - 0.5) * 30,
+          speedY: (Math.random() - 0.5) * 30,
+          color: color,
+          rotation: Math.random() * 360,
+          rotationSpeed: (Math.random() - 0.5) * 10,
+          gravity: Math.random() * 0.5 + 0.2
+        });
+      }
+    });
+
+    // Add glitch effect to the entire page
+    document.body.style.filter = 'hue-rotate(90deg) contrast(150%)';
+    document.body.style.transition = 'filter 0.5s ease-out';
+
+    // Animate elements falling apart
+    this.elements.forEach(element => {
+      element.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+      element.style.transform = `
+        translate(${(Math.random() - 0.5) * 200}px, ${(Math.random() - 0.5) * 200}px)
+        rotate(${(Math.random() - 0.5) * 720}deg)
+        scale(${Math.random() * 0.3 + 0.1})
+      `;
+      element.style.opacity = '0';
+      element.style.filter = 'blur(5px)';
+    });
+
+    // Start particle animation
+    this.animateParticles();
+
+    // Add screen shake effect
+    this.addScreenShake();
+
+    // Sequence: Destroy -> Story -> Rebuild
+    setTimeout(() => {
+      // Clear all particles and effects
+      this.clearEffects();
+      // Show Flash story
+      this.showFlashStory();
+    }, 2000);
+  }
+
+  clearEffects() {
+    // Remove all particles and reset page
+    document.body.style.filter = '';
+    document.body.style.transform = '';
+    // Clear any remaining particles
+    const canvas = document.querySelector('canvas');
+    if (canvas) canvas.remove();
+  }
+
+  showFlashStory() {
+    // Create story container
+    const storyContainer = document.createElement('div');
+    storyContainer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    `;
+
+    // Add Flash and story content
+    storyContainer.innerHTML = `
+      <div style="
+        text-align: center;
+        color: white;
+        max-width: 600px;
+        padding: 20px;
+      ">
+        <div style="
+          width: 150px;
+          height: 150px;
+          margin: 0 auto 30px;
+          animation: flashRun 0.5s infinite;
+        ">
+          ${this.getFlashSVG()}
+        </div>
+        <div style="
+          font-family: Arial, sans-serif;
+          font-size: 24px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+        ">
+          <p style="margin-bottom: 20px;">
+            <strong style="color: #e63946;">The Flash:</strong><br>
+            ${this.getFlashMessage()}
+          </p>
+        </div>
+        <div style="
+          font-size: 18px;
+          color: #888;
+          margin-top: 20px;
+        ">
+          Preparing to rebuild...
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(storyContainer);
+    
+    // Fade in the story
+    setTimeout(() => {
+      storyContainer.style.opacity = '1';
+    }, 100);
+
+    // Add animation style
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes flashRun {
+        0% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        100% { transform: translateX(-5px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Start rebuild after story
+    setTimeout(() => {
+      storyContainer.style.opacity = '0';
+      setTimeout(() => {
+        storyContainer.remove();
+        this.rebuildWithFlash();
+      }, 500);
+    }, 4000);
+  }
+
+  rebuildWithFlash() {
+    // Create a single container for all animations
+    const animationContainer = document.createElement('div');
+    animationContainer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.5);
+    `;
+    document.body.appendChild(animationContainer);
+
+    // Create Flash with running animation
+    const flash = document.createElement('div');
+    flash.className = 'flash-character';
+    flash.innerHTML = this.getFlashSVG();
+    flash.style.cssText = `
+      position: fixed;
+      width: 50px;
+      height: 50px;
+      pointer-events: none;
+      will-change: transform;
+      transform: translateZ(0);
+      left: 50%;
+      top: 50%;
+      margin-left: -25px;
+      margin-top: -25px;
+    `;
+    animationContainer.appendChild(flash);
+
+    // Add running animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes flashRun {
+        0% { transform: rotate(-5deg); }
+        50% { transform: rotate(5deg); }
+        100% { transform: rotate(-5deg); }
+      }
+      @keyframes elementFloat {
+        0% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-10px) rotate(5deg); }
+        100% { transform: translateY(0) rotate(0deg); }
+      }
+      @keyframes rebuildGlow {
+        0% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)); }
+        50% { filter: brightness(1.5) drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)); }
+        100% { filter: brightness(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)); }
+      }
+      @keyframes placeElement {
+        0% { transform: scale(0.5); opacity: 0; }
+        50% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    let currentIndex = 0;
+    let animationFrame = null;
+    let lastX = window.innerWidth / 2;
+    let lastY = window.innerHeight / 2;
+
+    // Hide all elements initially
+    this.elements.forEach(element => {
+      element.style.opacity = '0';
+      element.style.transform = 'scale(0.5)';
+      element.style.transition = 'none';
+    });
+
+    const rebuildNext = () => {
+      if (currentIndex >= this.elements.length) {
+        cancelAnimationFrame(animationFrame);
+        animationContainer.style.opacity = '0';
+        setTimeout(() => {
+          animationContainer.remove();
+          style.remove();
+        }, 300);
+        this.cleanup();
+        return;
+      }
+
+      const element = this.elements[currentIndex];
+      const originalPos = this.originalPositions.get(element);
+      
+      if (!originalPos) {
+        currentIndex++;
+        rebuildNext();
+        return;
+      }
+
+      // Create a more dynamic path for Flash
+      const targetX = originalPos.x + originalPos.width / 2;
+      const targetY = originalPos.y + originalPos.height / 2;
+      
+      // Calculate a curved path
+      const controlX = (lastX + targetX) / 2;
+      const controlY = Math.min(lastY, targetY) - 100;
+      
+      // Create the carried element with floating animation
+      const carriedElement = document.createElement('div');
+      carriedElement.className = 'carried-element';
+      carriedElement.style.cssText = `
+        position: fixed;
+        width: ${originalPos.width}px;
+        height: ${originalPos.height}px;
+        pointer-events: none;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        animation: elementFloat 1s infinite, rebuildGlow 2s infinite;
+        opacity: 0;
+      `;
+      
+      // Clone and style the element
+      const elementClone = element.cloneNode(true);
+      elementClone.style.cssText = `
+        width: 100%;
+        height: 100%;
+        transform: scale(0.5);
+        filter: brightness(1.2) contrast(1.2);
+      `;
+      carriedElement.appendChild(elementClone);
+      animationContainer.appendChild(carriedElement);
+
+      // Animate Flash along the curved path
+      let progress = 0;
+      const animatePath = () => {
+        progress += 0.2; // Increased speed
+        if (progress > 1) {
+          progress = 1;
+        }
+
+        // Calculate position along the curve
+        const x = Math.pow(1 - progress, 2) * lastX + 
+                 2 * (1 - progress) * progress * controlX + 
+                 Math.pow(progress, 2) * targetX;
+        const y = Math.pow(1 - progress, 2) * lastY + 
+                 2 * (1 - progress) * progress * controlY + 
+                 Math.pow(progress, 2) * targetY;
+
+        // Update Flash position
+        flash.style.left = `${x}px`;
+        flash.style.top = `${y}px`;
+        flash.style.transform = `rotate(${Math.sin(progress * Math.PI * 2) * 20}deg)`;
+        
+        // Update carried element position
+        carriedElement.style.left = `${x + 30}px`;
+        carriedElement.style.top = `${y - 20}px`;
+        carriedElement.style.transform = `scale(0.5)`;
+        carriedElement.style.opacity = '0.8';
+
+        // Add lightning trail
+        if (Math.random() > 0.7) {
+          const trail = document.createElement('div');
+          trail.className = 'lightning-trail';
+          trail.style.cssText = `
+            position: fixed;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, 
+              rgba(255, 255, 255, 0.8),
+              rgba(255, 255, 255, 0)
+            );
+            left: ${x + 25}px;
+            top: ${y - 25}px;
+            transform: rotate(${Math.random() * 360}deg);
+            opacity: 0.8;
+            pointer-events: none;
+            will-change: transform, opacity;
+          `;
+          animationContainer.appendChild(trail);
+          setTimeout(() => trail.remove(), 200);
+        }
+
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animatePath);
+        } else {
+          // Place the element with a dramatic effect
+          element.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          element.style.animation = 'placeElement 0.3s forwards';
+          
+          // Fade out carried element
+          carriedElement.style.opacity = '0';
+          carriedElement.style.transform = `scale(0.3)`;
+          
+          // Update last position
+          lastX = targetX;
+          lastY = targetY;
+          
+          // Remove carried element
+          setTimeout(() => carriedElement.remove(), 200);
+          
+          // Move to next element
+          currentIndex++;
+          setTimeout(rebuildNext, 50);
+        }
+      };
+
+      animatePath();
+    };
+
+    rebuildNext();
+  }
+
+  showBlockedMessage() {
+    document.body.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        z-index: 9999;
+      ">
+        <div style="
+          width: 200px;
+          height: 200px;
+          margin-bottom: 20px;
+        ">
+          ${this.getFlashSVG()}
+        </div>
+        <h1 style="color: #e63946; margin-bottom: 20px;">Access Blocked by The Flash</h1>
+        <p style="color: #1d3557; font-size: 18px; max-width: 600px; line-height: 1.6;">
+          I warned you three times about destroying Rashed's website! 
+          I'm taking a break from rebuilding it. 
+          Please come back later when you're ready to be more careful.
+        </p>
+        <button onclick="location.reload()" style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          background: #e63946;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+        ">
+          I Promise to Be Careful
+        </button>
+      </div>
+    `;
+  }
+
+  getFlashSVG() {
+    return `
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="flashGradient${Date.now()}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFD700"/>
+            <stop offset="100%" style="stop-color:#FFA500"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 10 L65 40 L85 40 L60 60 L75 90 L50 60 L30 60 Z" 
+              fill="url(#flashGradient${Date.now()})" 
+              stroke="#FF4500" 
+              stroke-width="2"/>
+        <circle cx="50" cy="50" r="45" 
+                fill="none" 
+                stroke="url(#flashGradient${Date.now()})" 
+                stroke-width="2" 
+                stroke-dasharray="5,5"/>
+      </svg>
+    `;
+  }
+
+  getFlashMessage() {
+    const messages = [
+      "Oh no! You're destroying Rashed's website! Don't worry, I'll rebuild it, but please be more careful!",
+      "Not again! I just finished rebuilding this website. I'll fix it one more time, but this is getting tiring!",
+      "This is the last time I'm rebuilding this website! Next time, you're on your own!"
+    ];
+    return messages[Math.min(this.destroyCount - 1, messages.length - 1)];
+  }
+
+  addScreenShake() {
+    const shake = () => {
+      const intensity = 10;
+      const x = (Math.random() - 0.5) * intensity;
+      const y = (Math.random() - 0.5) * intensity;
+      document.body.style.transform = `translate(${x}px, ${y}px)`;
+    };
+
+    const shakeInterval = setInterval(shake, 50);
+    setTimeout(() => {
+      clearInterval(shakeInterval);
+      document.body.style.transform = '';
+    }, 1000);
+  }
+
+  animateParticles() {
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '9999';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      this.particles.forEach(particle => {
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        particle.speedY += particle.gravity;
+        particle.rotation += particle.rotationSpeed;
+
+        ctx.save();
+        ctx.translate(particle.x, particle.y);
+        ctx.rotate(particle.rotation * Math.PI / 180);
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.rect(-particle.size/2, -particle.size/2, particle.size, particle.size);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      if (this.particles.some(p => p.y < window.innerHeight + 100)) {
+        requestAnimationFrame(animate);
+      } else {
+        canvas.remove();
+      }
+    };
+
+    animate();
+  }
+
+  cleanup() {
+    // Reset page filter
+    document.body.style.filter = '';
+    
+    // Restore original styles
+    this.elements.forEach(element => {
+      const originalStyle = this.originalStyles.get(element);
+      const originalDisplay = this.originalDisplay.get(element);
+      
+      if (originalStyle) {
+        element.style.transform = originalStyle.transform;
+        element.style.transition = originalStyle.transition;
+        element.style.position = originalStyle.position;
+        element.style.opacity = originalStyle.opacity;
+        element.style.filter = originalStyle.filter;
+      }
+      
+      // Handle tooltips specially
+      if (element.classList.contains('skill-tooltip')) {
+        element.style.display = 'none';
+      } else if (originalDisplay) {
+        element.style.display = originalDisplay;
+      }
+    });
+  }
+}
+
 // Update the commands
 const commands = {
   // ... existing commands ...
@@ -2556,6 +3125,20 @@ const commands = {
           Welcome to the future, netrunner
         </div>
       </div>
+    `;
+  },
+  destroy: () => {
+    const effect = new DestroyEffect();
+    effectManager.addEffect(effect);
+    
+    setTimeout(() => {
+      effectManager.removeEffect(effect);
+      effect.cleanup();
+    }, 5000);
+    
+    return `
+      <span style="color: var(--neon-pink);">INITIATING SYSTEM DESTRUCTION...</span>
+      <span style="color: var(--text-secondary);">Warning: This is just a visual effect!</span>
     `;
   }
 };
