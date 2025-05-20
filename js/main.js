@@ -878,34 +878,137 @@ try {
             <span style="color: var(--text-secondary);">Example: ai chat What is full stack development?</span>
           `;
         }
-        
-        // Simulate typing response with a delay
-        setTimeout(() => {
-          const aiResponses = {
-            "hello": "Hello! How can I assist you with your software development or technology needs today?",
-            "help": "I can help with various topics including programming, cloud infrastructure, healthcare tech, or development practices. Just ask a specific question!",
-            "default": `Based on your query about "${prompt}", I'd suggest exploring modern development frameworks and cloud-native architectures. Would you like more specific information about any particular technology?`
-          };
-          
-          let response = aiResponses[prompt.toLowerCase()] || aiResponses.default;
-          
-          // Remove the typing indicator and add the response
-          const typingElement = document.querySelector('.ai-typing');
-          if (typingElement) {
-            typingElement.parentNode.removeChild(typingElement);
-          }
-          
-          terminalOutput.innerHTML += `<div><span style="color: var(--accent);">AI Assistant:</span> ${response}</div>`;
-          terminalOutput.scrollTop = terminalOutput.scrollHeight;
-        }, 1500);
-        
-        return `
-          <span style="color: var(--neon-pink);">AI processing: "${prompt}"</span>
+
+        // Show typing indicator
+        terminalOutput.innerHTML += `
           <div class="ai-typing">
             <div class="ai-typing-dot"></div>
             <div class="ai-typing-dot"></div>
             <div class="ai-typing-dot"></div>
           </div>
+        `;
+
+        // Call Hugging Face API
+        const API_URL = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta";
+        const API_KEY = "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";
+
+        const systemPrompt = `<|system|>
+You are an AI assistant for Rashed M Omar's portfolio website. You have the following information about Rashed:
+
+About Rashed:
+- Full Stack Developer and DevOps Engineer
+- Based in the United States
+- Passionate about creating innovative solutions and optimizing development workflows
+- Experienced in both frontend and backend development
+
+Technical Skills:
+- Frontend: React, Vue.js, Angular, HTML5, CSS3, JavaScript/TypeScript
+- Backend: Node.js, Python, Java, Spring Boot, Express.js
+- DevOps: Docker, Kubernetes, AWS, CI/CD, Jenkins, GitLab CI
+- Databases: MongoDB, PostgreSQL, MySQL
+- Other: RESTful APIs, GraphQL, Microservices, Agile methodologies
+
+Experience:
+- Full Stack Developer at TechCorp (2020-2022)
+  * Developed and maintained web applications
+  * Implemented CI/CD pipelines
+  * Collaborated with cross-functional teams
+
+- DevOps Engineer at CloudSolutions (2018-2020)
+  * Managed cloud infrastructure
+  * Automated deployment processes
+  * Optimized system performance
+
+Projects:
+1. E-commerce Platform
+   - Built with React and Node.js
+   - Features: User authentication, product management, payment integration
+   - Technologies: MongoDB, Express.js, Redux
+
+2. Task Management System
+   - Vue.js frontend with Spring Boot backend
+   - Features: Real-time updates, team collaboration
+   - Technologies: WebSocket, JWT authentication
+
+3. Cloud Infrastructure Automation
+   - Automated deployment using AWS and Terraform
+   - Implemented monitoring and logging solutions
+   - Technologies: Docker, Kubernetes, Jenkins
+
+Keep your responses concise and relevant to the user's question. If asked about Rashed's skills, experience, or projects, provide specific details from the information above. For other questions, respond naturally while maintaining professionalism.
+</|system|>
+<|user|>${prompt}</|user|>
+<|assistant|>`;
+
+        // Log the API request
+        console.log('Making API request to Hugging Face...');
+        console.log('Prompt:', systemPrompt);
+
+        // Make the API call
+        fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            inputs: systemPrompt,
+            parameters: {
+              max_new_tokens: 250,
+              temperature: 0.7,
+              top_p: 0.9,
+              repetition_penalty: 1.1,
+              return_full_text: false,
+              do_sample: true
+            }
+          }),
+        })
+        .then(response => {
+          console.log('API Response status:', response.status);
+          if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('API Response data:', data);
+          // Remove typing indicator
+          const typingElement = document.querySelector('.ai-typing');
+          if (typingElement) {
+            typingElement.remove();
+          }
+
+          let answer = data[0]?.generated_text?.trim() || "I'm sorry, I couldn't generate a response at the moment.";
+          
+          // Clean up the response
+          answer = answer.replace(/<\|(system|user|assistant)\|>/g, '').trim();
+          
+          // Format the response with proper styling
+          terminalOutput.innerHTML += `
+            <div style="margin: 10px 0;">
+              <span style="color: var(--accent); font-weight: bold;">AI Assistant:</span>
+              <span style="color: var(--text-secondary); display: block; margin-top: 5px; padding-left: 10px; border-left: 2px solid var(--accent);">${answer}</span>
+            </div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        })
+        .catch(error => {
+          console.error('API Error:', error);
+          // Remove typing indicator
+          const typingElement = document.querySelector('.ai-typing');
+          if (typingElement) {
+            typingElement.remove();
+          }
+
+          terminalOutput.innerHTML += `
+            <div style="margin: 10px 0;">
+              <span style="color: var(--neon-pink); font-weight: bold;">Error:</span>
+              <span style="color: var(--text-secondary); display: block; margin-top: 5px;">I'm having trouble connecting to my brain right now. Please try again in a moment.</span>
+            </div>`;
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        });
+
+        return `
+          <span style="color: var(--neon-pink);">AI processing: "${prompt}"</span>
         `;
       }
       
@@ -1088,7 +1191,6 @@ try {
       const art = {
         'hacker': `
         <pre style="color: var(--accent);">
-        ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
         ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
