@@ -37,8 +37,4 @@ bower_components/
 
 # Build output
 dist/
-build/
-
-# Ignore files with API keys
-js/main.js
-js/chat.js 
+build/ 

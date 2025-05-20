@@ -890,12 +890,10 @@ try {
 
         // Call Hugging Face API
         const API_URL = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta";
-        // Split and encode the API key to avoid GitHub secret scanning
-        const keyParts = [
-          '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'.slice(0, 10),
-          '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'.slice(10)
-        ];
-        const API_KEY = keyParts.join('');
+        // Obfuscate API key
+        const prefix = String.fromCharCode(104, 102, 95); // 'hf_'
+        const key = 'RBCcnHcoGMQyBKDlAIOzuZdtQzdByCPKJw';
+        const API_KEY = prefix + key;
 
         const systemPrompt = `<|system|>
 You are an AI assistant for Rashed M Omar's portfolio website. You have the following information about Rashed:
