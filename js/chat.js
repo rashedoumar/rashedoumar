@@ -213,15 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
     fab.innerHTML = `
         <div class="fab-content">
             <span class="fab-icon">💬</span>
-            <span class="fab-text">Chat</span>
+            <span class="fab-text">Chat With Rashed Ai</span>
         </div>
     `;
     fab.style.cssText = `
         position: fixed;
         bottom: 30px;
         right: 30px;
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
         background: #00ff00;
         border-radius: 50%;
         display: flex;
@@ -246,13 +246,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fabIcon = fab.querySelector('.fab-icon');
     fabIcon.style.cssText = `
-        font-size: 24px;
+        font-size: 32px;
         color: #000;
     `;
 
     const fabText = fab.querySelector('.fab-text');
     fabText.style.cssText = `
-        font-size: 18px;
+        font-size: 11px;
         font-weight: bold;
         color: #000;
         opacity: 0;
@@ -262,14 +262,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Expand on hover
     fab.addEventListener('mouseenter', () => {
-        fab.style.width = '140px';
-        fab.style.borderRadius = '30px';
+        fab.style.width = '200px';
+        fab.style.borderRadius = '40px';
         fabText.style.opacity = '1';
         fabText.style.transform = 'translateX(0)';
     });
 
     fab.addEventListener('mouseleave', () => {
-        fab.style.width = '60px';
+        fab.style.width = '80px';
         fab.style.borderRadius = '50%';
         fabText.style.opacity = '0';
         fabText.style.transform = 'translateX(-10px)';
@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chatContainer = document.createElement('div');
     chatContainer.className = 'chat-container';
-    chatContainer.style.display = 'none';
+    chatContainer.style.display = 'flex';
     chatContainer.innerHTML = `
         <div class="chat-header">
             <h3>AI Assistant</h3>
@@ -293,6 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.body.appendChild(chatContainer);
 
+    // Hide FAB initially since chat is open
+    fab.style.display = 'none';
+
     const messagesContainer = chatContainer.querySelector('.chat-messages');
     const input = chatContainer.querySelector('.chat-input');
     const sendBtn = chatContainer.querySelector('.send-btn');
@@ -302,20 +305,17 @@ document.addEventListener('DOMContentLoaded', () => {
     fab.addEventListener('click', () => {
         if (chatContainer.style.display === 'none') {
             chatContainer.style.display = 'flex';
-            fab.style.transform = 'scale(0.8)';
-            fab.style.opacity = '0.5';
+            fab.style.display = 'none'; // Hide FAB when chat is open
         } else {
             chatContainer.style.display = 'none';
-            fab.style.transform = 'scale(1)';
-            fab.style.opacity = '1';
+            fab.style.display = 'flex'; // Show FAB when chat is closed
         }
     });
 
     // Update minimize button
     minimizeBtn.addEventListener('click', () => {
         chatContainer.style.display = 'none';
-        fab.style.transform = 'scale(1)';
-        fab.style.opacity = '1';
+        fab.style.display = 'flex'; // Show FAB when chat is minimized
     });
 
     function addMessage(text, isUser = false) {
