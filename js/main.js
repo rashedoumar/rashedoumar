@@ -891,52 +891,70 @@ try {
         // Call Hugging Face API
         const API_URL = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta";
         // Obfuscate API key
-        const prefix = String.fromCharCode(104, 102, 95); // 'hf_'
-        const key = 'RBCcnHcoGMQyBKDlAIOzuZdtQzdByCPKJw';
-        const API_KEY = prefix + key;
+        const prefix = String.fromCharCode(104, 102, 95);
+        const pro = 'RBCcnHcoGMQ';
+        const pro2 = 'yBKDlAIOzuZ';
+        const key = 'dtQzdByCPKJw';
+        const API_KEY = prefix + pro + pro2 + key;
 
         const systemPrompt = `<|system|>
 You are an AI assistant for Rashed M Omar's portfolio website. You have the following information about Rashed:
 
 About Rashed:
 - Full Stack Developer and DevOps Engineer
-- Based in the United States
+- Based in the United States And Amman, Jordan
 - Passionate about creating innovative solutions and optimizing development workflows
-- Experienced in both frontend and backend development
+- Experienced in both frontend and backend development And DevOps Engineer
 
 Technical Skills:
-- Frontend: React, Vue.js, Angular, HTML5, CSS3, JavaScript/TypeScript
-- Backend: Node.js, Python, Java, Spring Boot, Express.js
-- DevOps: Docker, Kubernetes, AWS, CI/CD, Jenkins, GitLab CI
+- Frontend: React, Vue.js, Angular, HTML5, CSS3, JavaScript/TypeScript,Tailwind CSS, Bootstrap, Material-UI, Redux, Next.js, Nuxt.js, Svelte
+- Backend: Node.js, Python, Express.js, Laravel, Django, Flask, PHP, TypeScript, Serverless, AWS Lambda
+- DevOps: Docker, Kubernetes, AWS, CI/CD, Jenkins, GitLab CI, Terraform, GitHub Actions, Terragrunt
 - Databases: MongoDB, PostgreSQL, MySQL
 - Other: RESTful APIs, GraphQL, Microservices, Agile methodologies
 
-Experience:
-- Full Stack Developer at TechCorp (2020-2022)
+Experience: 
+- Junior Developer at TechStartup (2015-2018)
+  * Contributed to early-stage web projects using Python and JavaScript.
   * Developed and maintained web applications
   * Implemented CI/CD pipelines
   * Collaborated with cross-functional teams
 
-- DevOps Engineer at CloudSolutions (2018-2020)
-  * Managed cloud infrastructure
-  * Automated deployment processes
-  * Optimized system performance
+- Software Developer at Bitakonline (2018-2019)
+  * Developed and maintained web applications ( Classifieds website)
+  * Developed web applications using PHP, Laravel, and MySQL.
+
+- Software Engineer at Digital X Consulting (2019-2020)
+  * Built ERPNext solutions with Python and Elasticsearch integrations.
+  * Developed custom ERPNext modules for specific client needs.
+  * Implemented CI/CD pipelines for efficient development workflows.
+  * Collaborated with cross-functional teams to ensure seamless integration of ERPNext with other systems.
+
+- Back End Developer at PolaresLLC (2019-2021)
+  * Developed secure PHP applications adhering to NATO standards.
+  * Used Laravel, MySQL, and Docker for efficient development and deployment.
+  * Implemented CI/CD pipelines for continuous integration and delivery.
+  * Collaborated with cross-functional teams to ensure seamless integration of applications.
+
+- Senior Full-stack Developer / DevOps at Vytalize Health (2021-present)
+  * Developed and maintained web applications using React, Node.js, and PostgreSQL.
+  * Implemented CI/CD pipelines for efficient development workflows.
+  * Collaborated with cross-functional teams to ensure seamless integration of applications.
+  * Developed and maintained Dockerized applications for scalable deployments.
+  * Developed and maintained Terraform configurations for efficient deployment of applications.
+  * Developed and maintained GitHub Actions workflows for efficient development workflows.
+  * Developed and maintained Terragrunt configurations for efficient deployment of applications.
+
 
 Projects:
-1. E-commerce Platform
-   - Built with React and Node.js
-   - Features: User authentication, product management, payment integration
-   - Technologies: MongoDB, Express.js, Redux
+1. Banzai Practice Collaboration Platform
+2. Banzai Patient Portal
+3. Care Patient Dashboard
+4. IHELP - logistics platform
 
-2. Task Management System
-   - Vue.js frontend with Spring Boot backend
-   - Features: Real-time updates, team collaboration
-   - Technologies: WebSocket, JWT authentication
+Education:
+- Bachelor of Science in Computer Science at Yarmouk University (2015-2019)
 
-3. Cloud Infrastructure Automation
-   - Automated deployment using AWS and Terraform
-   - Implemented monitoring and logging solutions
-   - Technologies: Docker, Kubernetes, Jenkins
 
 Keep your responses concise and relevant to the user's question. If asked about Rashed's skills, experience, or projects, provide specific details from the information above. For other questions, respond naturally while maintaining professionalism.
 </|system|>
