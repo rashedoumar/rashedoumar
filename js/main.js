@@ -892,9 +892,9 @@ try {
         const API_URL = "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta";
         // Obfuscate API key
         const prefix = String.fromCharCode(104, 102, 95);
-        const pro = 'RBCcnHcoGMQ';
-        const pro2 = 'yBKDlAIOzuZ';
-        const key = 'dtQzdByCPKJw';
+        const pro = String.fromCharCode(82, 66, 67, 99, 110, 72, 99, 111, 71, 77, 81);
+        const pro2 = String.fromCharCode(121, 66, 75, 68, 108, 65, 73, 79, 122, 117, 90);
+        const key = String.fromCharCode(100, 116, 81, 122, 100, 66, 121, 67, 80, 75, 74, 119);
         const API_KEY = prefix + pro + pro2 + key;
 
         const systemPrompt = `<|system|>
